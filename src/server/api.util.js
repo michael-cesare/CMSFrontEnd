@@ -1,0 +1,187 @@
+import fetch from 'isomorphic-fetch';
+// import https from 'https';
+
+// import logger from '@util/logger.util';
+// import { isDev } from '@util/url.util';
+
+// import { SITE_URL } from "@config/envConfig";
+
+const rootUrl = "http://localhost:5000"; // SITE_URL();
+
+const EFetchMethods = {
+  get:'get',
+  post: 'post',
+  put:'put',
+  delete:'delete',
+}
+
+const acceptHeader = 'Accept';
+const contentTypeHeader = 'Content-Type';
+const authHeader = 'Authorization';
+const contentType = 'application/json';
+
+const formatUrl = (path) => {
+  const adjustedPath = path[0] !== '/' ? '/'.concat(path) : path;
+
+  return adjustedPath;
+};
+
+const checkStatus = (response) => {
+  if (response.status && response.status >= 200 && response.status < 300) {
+    return response;
+  }
+
+  // logger.log(`[ApiClient][checkStatus][Error]: ${response.statusText}`);
+  const error = new Error(response.statusText);
+  throw error;
+};
+
+const parseJson = (response) => {
+  // Only parse when there is actually content to parse
+  if (response && response.statusText && response.statusText === 'No Content') {
+    // logger.log(`[ApiClient][parseJson][EMPTY]: response: ${JSON.stringify(response)}`);
+
+    return '';
+  }
+
+  return response && response.text
+    ? response.text().then((v) => (v && v !== '' ? JSON.parse(v) : {}))
+    : response;
+};
+
+const serializeParams = (obj) => {
+  const str = [];
+
+  for (const property in obj) {
+    if (obj.hasOwnProperty(property) && obj[property]) {
+      // encodeURI does not encode these separators (; / ? : @ & = + $ , #). encodeURIComponent decodes all
+      str.push(encodeURI(property).concat('=', encodeURI(obj[property])));
+    }
+  }
+
+  return str.join('&');
+};
+
+// const agent = new https.Agent({
+//   rejectUnauthorized: false,
+// });
+
+/**
+ * Summary. Wrapper for isomorphic-fetch which makes HTTP Requests
+ *
+ * Description. This is wrapper for isomorphic-fetch. Method available: get, post, put, delete. This methods will return a promise result, either a reject or a success.
+ * 
+ * @class ApiClient classname used for HTTP Requests.
+ */
+class ApiClient {
+  baseUrl;
+  tokenGetter;
+
+  /**
+   * Summary. Wrapper for isomorphic-fetch which makes HTTP Requests
+   * @param {string} baseUrl API Url that is used by isomorphic-fetch
+   * @param {*} tokenGetter you can inject a token getter that will add token in requests
+   */
+  constructor(baseUrl, tokenGetter = undefined) {
+    this.baseUrl = baseUrl;
+    this.tokenGetter = tokenGetter;
+  }
+
+  fetchData = (method, path, { params, data, options } = {}) => {
+    return new Promise((resolve, reject) => {
+        // const handler = async () => {
+        const adjustedPath = formatUrl(path);
+        let url = this.baseUrl + adjustedPath;
+        const token = this.tokenGetter ? this.tokenGetter() : '';
+        // logger.hit(`[ApiClient]: ${url}`);
+
+        const init = {
+          method,
+          headers: {
+            [acceptHeader]: contentType,
+          },
+        };
+
+        if ((!options || !(options.isPublicPath))
+          && token) {
+          init.headers[authHeader] = 'Bearer '.concat(token);
+        }
+
+        if (options && options.isPublicPath && options.noCors) {
+          // init.mode = 'no-cors';
+        }
+
+        if (params) {
+          url = url.concat('?', serializeParams(params));
+          // logger.hit(`[ApiClient]: with params ${url}`);
+        }
+
+        if (data) {
+          init.body = JSON.stringify(data);
+          init.headers[contentTypeHeader] = contentType;
+        }
+
+        // for server side, the following is requried.
+        // if (!isDev()) {
+        //   init.agent = agent;
+        // }
+
+        // if (method.toLowerCase() === 'get') {
+        //   // init.headers['Cache-Control'] = 'no-cache';
+        //   // init.headers.Pragma = 'no-cache';
+        // }
+
+        // logger.info(`[ApiClient]: get ${url}`);
+        fetch(url, init)
+          .then(checkStatus)
+          .then(parseJson)
+          .then((response) => {
+            // logger.debug(`[ApiClient]: resolve: ${JSON.stringify(response)}`);
+            resolve(response);
+          })
+          .catch((error) => {
+            if (error && error.response && error.response.statusText) {
+              // logger.debug(`[ApiClient][ERROR]: url ${url}, isServer:'${reactConfigs.SERVER ? 'T' : 'F'}', ${JSON.stringify(error)}`);
+              // logger.debug(`[ApiClient][ERROR]: url ${url},  Error: ${error.response.statusText}`);
+              parseJson(error.response).then((body) => {
+                reject(body);
+              });
+            } else if (error && error.message) {
+              // logger.debug(`[ApiClient][ERROR]: url ${url}, isServer:'${reactConfigs.SERVER ? 'T' : 'F'}', ${JSON.stringify(error)}`);
+              // logger.debug(`[ApiClient][ERROR]: url ${url}`);
+              reject(error.message);
+            } else {
+              reject(error);
+            }
+          });
+    });
+
+      // ToDo - research timeouts... set a timeout of all fetch request
+      // setTimeout((delay, handleResult) => {
+      //   const req = handleResult(params);
+
+      //   return handleResult ? resolve(req) : reject(`Reject Timeout ${ delay }`);
+      // }, delay);
+  };
+
+  get (path, ...args ) {
+    return this.fetchData( EFetchMethods.get, path, ...args );
+  }
+
+  post (path, ...args ) {
+    return this.fetchData( EFetchMethods.post, path, ...args );
+  }
+
+  put (path, ...args ) {
+    return this.fetchData( EFetchMethods.put, path, ...args );
+  }
+
+  delete (path, ...args ) {
+    return this.fetchData( EFetchMethods.delete, path, ...args );
+  }
+}
+
+// Create a Instance as singleton
+const apiClient = new ApiClient(rootUrl);
+
+export default apiClient;
