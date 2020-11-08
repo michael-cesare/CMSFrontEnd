@@ -20,13 +20,13 @@ const contentTypeHeader = 'Content-Type';
 const authHeader = 'Authorization';
 const contentType = 'application/json';
 
-const formatUrl = (path) => {
+const formatUrl = (path:any) => {
   const adjustedPath = path[0] !== '/' ? '/'.concat(path) : path;
 
   return adjustedPath;
 };
 
-const checkStatus = (response) => {
+const checkStatus = (response:any) => {
   if (response.status && response.status >= 200 && response.status < 300) {
     return response;
   }
@@ -36,7 +36,7 @@ const checkStatus = (response) => {
   throw error;
 };
 
-const parseJson = (response) => {
+const parseJson = (response:any) => {
   // Only parse when there is actually content to parse
   if (response && response.statusText && response.statusText === 'No Content') {
     // logger.log(`[ApiClient][parseJson][EMPTY]: response: ${JSON.stringify(response)}`);
@@ -45,11 +45,11 @@ const parseJson = (response) => {
   }
 
   return response && response.text
-    ? response.text().then((v) => (v && v !== '' ? JSON.parse(v) : {}))
+    ? response.text().then((v:any) => (v && v !== '' ? JSON.parse(v) : {}))
     : response;
 };
 
-const serializeParams = (obj) => {
+const serializeParams = (obj:any) => {
   const str = [];
 
   for (const property in obj) {
@@ -82,12 +82,12 @@ class ApiClient {
    * @param {string} baseUrl API Url that is used by isomorphic-fetch
    * @param {*} tokenGetter you can inject a token getter that will add token in requests
    */
-  constructor(baseUrl, tokenGetter = undefined) {
+  constructor(baseUrl:any, tokenGetter:any = undefined) {
     this.baseUrl = baseUrl;
     this.tokenGetter = tokenGetter;
   }
 
-  fetchData = (method, path, { params, data, options } = {}) => {
+  fetchData = (method:any, path:any, { params, data, options }:any = {}) => {
     return new Promise((resolve, reject) => {
         // const handler = async () => {
         const adjustedPath = formatUrl(path);
@@ -99,8 +99,8 @@ class ApiClient {
           method,
           headers: {
             [acceptHeader]: contentType,
-          },
-        };
+          } as any
+        } as any;
 
         if ((!options || !(options.isPublicPath))
           && token) {
@@ -143,7 +143,7 @@ class ApiClient {
             if (error && error.response && error.response.statusText) {
               // logger.debug(`[ApiClient][ERROR]: url ${url}, isServer:'${reactConfigs.SERVER ? 'T' : 'F'}', ${JSON.stringify(error)}`);
               // logger.debug(`[ApiClient][ERROR]: url ${url},  Error: ${error.response.statusText}`);
-              parseJson(error.response).then((body) => {
+              parseJson(error.response).then((body:any) => {
                 reject(body);
               });
             } else if (error && error.message) {
@@ -164,19 +164,19 @@ class ApiClient {
       // }, delay);
   };
 
-  get (path, ...args ) {
+  get (path:any, ...args:any ) {
     return this.fetchData( EFetchMethods.get, path, ...args );
   }
 
-  post (path, ...args ) {
+  post (path:any, ...args:any ) {
     return this.fetchData( EFetchMethods.post, path, ...args );
   }
 
-  put (path, ...args ) {
+  put (path:any, ...args:any ) {
     return this.fetchData( EFetchMethods.put, path, ...args );
   }
 
-  delete (path, ...args ) {
+  delete (path:any, ...args:any ) {
     return this.fetchData( EFetchMethods.delete, path, ...args );
   }
 }

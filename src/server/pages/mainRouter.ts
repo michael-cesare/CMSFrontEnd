@@ -1,11 +1,11 @@
 import express from 'express';
 
+import apiClient from '@server/api.util'
 import { renderPage } from './pageChunk'
-import apiClient from '../api.util'
 
 const mainRouter = express.Router();
 
-const fetch = async (fetchUrl) => {
+const fetch = async (fetchUrl:any) => {
   return await apiClient.get(fetchUrl, {
     options: {
       isPublicPath: true,
@@ -13,7 +13,7 @@ const fetch = async (fetchUrl) => {
   });
 };
 
-const mainRoute = async (req, res, next) => {
+const mainRoute = async (req:any, res:any, next:any) => {
   const locationUrl = req.url || '/';
   const ssrState = await fetch( locationUrl );
 
@@ -24,6 +24,7 @@ const mainRoute = async (req, res, next) => {
   res.end();
 };
 
+mainRouter.get('/', mainRoute);
 mainRouter.get('/*', mainRoute);
 
 export default mainRouter;
