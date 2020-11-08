@@ -11,7 +11,7 @@ const getConfig = target => ({
   name: target,
   mode: development ? 'development' : 'production',
   target,
-  entry: `./src/client/main-${target}.js`,
+  entry: `./src/server/main.ts`,
   module: {
     rules: [
       {
@@ -35,7 +35,7 @@ const getConfig = target => ({
       },
     ],
   },
-  externals:
+  externals: 
     target === 'node' ? ['@loadable/component', nodeExternals()] : undefined,
 
   optimization: {

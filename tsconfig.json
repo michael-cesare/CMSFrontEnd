@@ -42,8 +42,18 @@
 
     /* Module Resolution Options */
     // "moduleResolution": "node",            /* Specify module resolution strategy: 'node' (Node.js) or 'classic' (TypeScript pre-1.6). */
-    // "baseUrl": "./",                       /* Base directory to resolve non-absolute module names. */
-    // "paths": {},                           /* A series of entries which re-map imports to lookup locations relative to the 'baseUrl'. */
+    "baseUrl": "./",                       /* Base directory to resolve non-absolute module names. */
+    "paths": {
+      "@/*": [ "src/*" ],
+      "@server*": [ "src/server/*" ],
+      "@client/*": [ "src/client/*" ],
+      "@redux/*": [ "src/client/redux/*" ],
+      "@epics/*": [ "src/client/epics/*" ],
+      "@utils/*": [ "src/client/utils/*" ],
+      "@views/*": [ "src/client/views/*" ],
+      "@components/*": [ "src/client/components/*" ],
+      "@srcTypes/*": [ "src/types/*" ],
+    },                           /* A series of entries which re-map imports to lookup locations relative to the 'baseUrl'. */
     // "rootDirs": [],                        /* List of root folders whose combined content represents the structure of the project at runtime. */
     // "typeRoots": [],                       /* List of folders to include type definitions from. */
     // "types": [],                           /* Type declaration files to be included in compilation. */
@@ -62,11 +72,18 @@
     // "experimentalDecorators": true,        /* Enables experimental support for ES7 decorators. */
     // "emitDecoratorMetadata": true,         /* Enables experimental support for emitting type metadata for decorators. */
 
+    // "sourceMap": true,
     /* Advanced Options */
     "skipLibCheck": true /* Skip type checking of declaration files. */,
     "forceConsistentCasingInFileNames": true,
     /* Disallow inconsistently-cased references to the same file. */
     "jsx": "react",
     "newLine": "LF" /*	Use the specified end of line sequence to be used when emitting files: "crlf" (windows) or "lf" (unix).”*/
-  }
+  },
+  "include": [    
+    "./src/**/*",
+    "**/*.ts",
+    "**/*.tsx",
+    "**/*.js"
+  ],
 }

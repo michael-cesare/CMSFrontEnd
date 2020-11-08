@@ -1,6 +1,6 @@
-const renderHtmlApp = (htmlDom, preloadedState, webExtractor) => {
+const renderHtmlApp = (htmlDom:any, preloadedState:any, webExtractor:any) => {
   const nodeSSRState = preloadedState
-  ? JSON.stringify(preloadedState).replace(/</g, '\\u003c')
+  ? JSON.stringify(preloadedState) // .replace(/</g, '\\u003c')
   : {};
 
   const scriptTags = webExtractor ? webExtractor.getScriptTags() : '';
@@ -18,14 +18,7 @@ const renderHtmlApp = (htmlDom, preloadedState, webExtractor) => {
       ${linkTags}
       ${styleTags}
     </head>
-    <body>
-      <script>console.log('html is loaded')</script>    
-      <div id="main">${htmlDom}</div>
-      <script>
-        window.__INITIAL_STATE__ = ${nodeSSRState};
-      </script>
-      ${scriptTags}
-      <script>console.log('html is ready')</script>
+    <body><div id="main">${htmlDom}</div><script id="__NODE_STATE__">window.__INITIAL_STATE__ = ${nodeSSRState};</script>${scriptTags}</body>
   </html>
   `;
 };
