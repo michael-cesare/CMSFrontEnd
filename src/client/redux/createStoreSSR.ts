@@ -1,17 +1,47 @@
 import { compose, createStore, applyMiddleware } from 'redux';
+import { combineEpics, createEpicMiddleware } from 'redux-observable';
+
+import * as commonEpics from '@epics/common.epics';
+import * as pageEpics from '@epics/page.epics';
 
 import rootReducer from '@redux/rootReducer';
 
-const configureStoreSSR = (preloadedState: any) => {
-  const middlewareList: Array<any> = [];
+import middleware from './middleware';
 
-  const enhancer = compose(applyMiddleware(...middlewareList));
+const createStoreSSR = ( preloadedState: any, epicMiddleware: any ) => {
+  const middlewareList: Array<any> = [
+    middleware,
+    epicMiddleware,
+  ];
 
-  return createStore(
+  const enhancedMiddleware = compose( applyMiddleware(...middlewareList ));
+
+  const store = createStore(
     rootReducer,
     preloadedState,
-    enhancer,
+    enhancedMiddleware,
   );
+
+  return store;
 };
 
-export default configureStoreSSR;
+const epicMiddlewares = () => {
+  const epicMiddleware = createEpicMiddleware();
+
+  return epicMiddleware;
+}
+
+const runEpicMiddleware = ( epicMiddleware: any ) => {
+  const epics = [
+    commonEpics.handleSetupApp,
+    pageEpics.handleSetPage,
+  ]
+
+  epicMiddleware.run( combineEpics<any>( ...epics ) );
+}
+
+export {
+  createStoreSSR,
+  epicMiddlewares,
+  runEpicMiddleware,
+};

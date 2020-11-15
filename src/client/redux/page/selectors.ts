@@ -1,3 +1,5 @@
 import { IAppState } from '@redux/models';
 
-export const pageTypeSel = ( state: IAppState ): string => state.page.type;
+import { IPage } from '@client/types';
+
+export const pageDataSel = ( state: IAppState ): IPage => state.page;

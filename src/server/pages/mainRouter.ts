@@ -13,7 +13,7 @@ const fetch = async (fetchUrl:any) => {
   });
 };
 
-const mainRoute = async (req:any, res:any, next:any) => {
+const mainRoute = async (req:any, res:any) => {
   const locationUrl = req.url || '/';
   const ssrState = await fetch( locationUrl );
 

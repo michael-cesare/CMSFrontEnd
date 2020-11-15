@@ -1,13 +1,14 @@
 import { IAction } from '@redux/models';
+import { IPage } from '@client/types';
 
-import { ISetPageTypeAction } from './models';
+import { ISetPageAction } from './models';
 import ownTypes from './types';
 
 export const initPage = (): IAction => ( {
   type:    ownTypes.INIT,
 } );
 
-export const setPageType = ( pageType: string ): ISetPageTypeAction => ( {
-  type:    ownTypes.SET_PAGE_TYPE,
-  payload: pageType,
+export const setPage = ( page: IPage ): ISetPageAction => ( {
+  type:    ownTypes.SET_PAGE,
+  payload: page,
 } );

@@ -1,3 +1,6 @@
+
+import { WORDPRESS_HOST } from "@client/config/envConfig";
+
 export const isLocalhost = (): Boolean => {
   let nodeSSRState = false;
   if( typeof window !== 'undefined' && window ) {
@@ -13,3 +16,11 @@ export const isLocalhost = (): Boolean => {
 
   return nodeSSRState;
 };
+
+export const getContentUrl = (): string => {
+  return `//${WORDPRESS_HOST()}`;
+}
+
+export const getContentUploadsUrl = (): string => {
+  return `${getContentUrl()}/wp-content/uploads`;
+}

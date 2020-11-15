@@ -1,76 +1,86 @@
 import path, { resolve } from 'path'
+import webpack from 'webpack'
 import nodeExternals from 'webpack-node-externals'
+import HtmlWebpackPlugin from 'html-webpack-plugin'
 import LoadablePlugin from '@loadable/webpack-plugin'
 import MiniCssExtractPlugin from 'mini-css-extract-plugin'
-import CrudeTimingPlugin from './webpackFiles/crudeTimingPlugin'
 
+import CrudeTimingPlugin from './webpackFiles/crudeTimingPlugin'
+import loaderRules from './webpackFiles/loaderRules';
+
+const rootDir = path.join(__dirname, './');
 const pathResolve = ( location ) => resolve( '/', __dirname, location );
 
 const env = 'development';
-const production = env === 'production'
-const development = !production
+const isDevServer = false;
+const isDevelopment = env === 'development'
+const isProduction = env === 'production'
+const development = !isProduction
 
 const appRoot = pathResolve('./');
-const distPath = pathResolve('public/dist')
 const libPath = pathResolve('lib')
 const appSrc = path.join(appRoot, 'src');
 
-console.log( `
-root:${appRoot}
-src:${appSrc}
-` )
+const webEntry = isDevServer ? './src/client/main-web-dev-server.tsx' :  { ReactApp: ['./src/client/main-web.tsx'] };
+const nodeEntry = { NodeApp: ['./src/server/main.ts'] };
 
 const getOutput = target => ({
-  path: target === 'node' ? path.join(libPath, 'server') : path.join(distPath, target),
-  publicPath: target === 'node' ?  path.join(libPath, 'server') : `/dist/${target}/`, // used by webpackdevserver or express
-  filename: production ? '[name]-bundle-[chunkhash:8].js' : '[name].js',
-  chunkFilename: production ? 'js/[name]-bundle-[chunkhash:8].js' : 'js/[name].js',
-  //libraryTarget: target === 'node' ? 'commonjs2' : undefined,
+  path: target === 'node' ? path.join(libPath, 'server') : path.join(libPath, 'client'),
+  publicPath: target === 'node' ?  path.join(rootDir, 'lib', 'server') : '/client/', // used by webpackdevserver or express
+  filename: isProduction ? '[name]-bundle-[chunkhash:8].js' : '[name].js',
+  chunkFilename: isProduction ? 'js/[name]-bundle-[chunkhash:8].js' : 'js/[name].js',
+  libraryTarget: target === 'node' ? 'commonjs2' : undefined,
+});
+
+const HTMLWebpackPluginConfig = new HtmlWebpackPlugin({
+  template: path.join(appSrc, 'client', 'index.html'),
+  filename: "index.html",
+  inject: true
 });
 
 const nodePlugins = env => [
   new LoadablePlugin(),
+  new MiniCssExtractPlugin({
+    filename: 'styles/[name].css'
+  }),
 ];
 
 const webPlugins = env => [
+  new webpack.optimize.OccurrenceOrderPlugin(),
   new LoadablePlugin(),
   env === 'development' ? new CrudeTimingPlugin() : () => {},
+  new MiniCssExtractPlugin({
+    filename: 'styles/[name].css'
+  }),
+  HTMLWebpackPluginConfig,
 ];
 
 const getConfig = target => ({
   name: target,
   mode: development ? 'development' : 'production',
+  entry: target === 'node' ? nodeEntry : webEntry,
   target,
-  entry: target === 'node' ? './src/server/main.ts' : `./src/client/main-${target}.js`,
   module: {
-    rules: [
-      {
-        test: /\.([jt])sx?$/,
-        exclude: /node_modules/,
-        use: {
-          loader: 'babel-loader',
-          options: {
-            caller: { target },
-          },
-        },
-      },
-      {
-        test: /\.css$/,
-        use: [
-          {
-            loader: MiniCssExtractPlugin.loader,
-          },
-          'css-loader',
-        ],
-      },
-    ],
+    rules: loaderRules( target, env ),
   },
-  externals:
-    target === 'node' ? [nodeExternals()] : undefined,
+  externals: target === 'node' ? [
+    // '@loadable/component',
+    nodeExternals({
+      whitelist: [
+        // /^@loadable\/component$/,
+        // /^react$/,
+        // /^react-dom$/,
+        // /^core-js$/,
+        // /^commonjs$/,
+        // /^lodash$/,
+        // /^lodash.debounce$/,
+      ],
+    }),
+  ] : undefined,
 
-  optimization: {
-    runtimeChunk: target !== 'node',
-  },
+  // optimization: {
+  //   runtimeChunk: target !== 'node',
+  // },
 
   resolve: {
     extensions:[ ".ts", ".tsx", '.js', '.jsx', '.json', '.css', '.scss'],
@@ -84,12 +94,13 @@ const getConfig = target => ({
       '@views': resolve(appRoot, './src/client/views/'),
       '@components': resolve(appRoot, './src/client/components/'),
       '@srcTypes': resolve(appRoot, './src/types/'),
+      '@styles': resolve(appRoot, './src/static/scss/'),
+      '@sconfig': resolve(appRoot, './src/config/'),
     },
   },
 
   output: getOutput( target ),
-  plugins: [new LoadablePlugin(), new MiniCssExtractPlugin()],
-  devtool: target === 'web' && development ? 'eval-source-map' : 'cheap-source-map',  // 'cheap-source-map', 'eval', 'eval-source-map'
+  devtool: isDevelopment ? 'eval-source-map' : 'cheap-source-map',  // 'cheap-source-map', 'eval', 'eval-source-map'
 
   plugins: target === 'node' ? nodePlugins(env) : webPlugins(env),
 })

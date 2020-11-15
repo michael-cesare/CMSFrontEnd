@@ -2,22 +2,25 @@ import update from 'immutability-helper';
 
 import reducerUtil from '@client/utils/reducer.util';
 
-import { IPageState } from './models';
+import { IPageState, ISetPageAction } from './models';
 import ownTypes from './types';
 
 const initialState: IPageState = {
-  type: ''
+  type:     '',
+  domNodes: [],
 };
 
-const setPageType = ( state: IPageState, pageType: string ) => update( state, {
-  type: { $set: pageType }
+const setPage = ( state: IPageState, { payload }: ISetPageAction ) => update( state, {
+  type:     { $set: payload.type },
+  domNodes: { $set: payload.domNodes }
 } );
 
 const resetState = ( state: IPageState ) => update( state, {
-  type: { $set: initialState.type },
+  type:     { $set: initialState.type },
+  domNodes: { $set: initialState.domNodes }
 } );
 
 export default reducerUtil( initialState, {
-  [ownTypes.SET_PAGE_TYPE]: setPageType,
-  [ownTypes.RESET]:         resetState,
+  [ownTypes.SET_PAGE]: setPage,
+  [ownTypes.RESET]:    resetState,
 } );
