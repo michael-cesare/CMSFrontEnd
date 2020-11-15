@@ -1,0 +1,22 @@
+@import
+'reset',
+'variables',
+'mixins',
+'theme',
+'@views/layout/_layout';
+
+html {
+  font-size: 2.25vh;
+  font-family: 'Roboto', sans-serif;
+
+  body {
+    margin: 0;
+    padding: 0;
+    display: block;
+    color: $font-color1;
+
+    &.no-scroll {
+      overflow: hidden;
+    }
+  }
+}

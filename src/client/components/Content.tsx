@@ -12,7 +12,7 @@ class Content extends PureComponent<IOwnProps> {
     } = this.props;
 
     return (
-      <span
+      <div
         className={contentClass}
         dangerouslySetInnerHTML={{ __html: children }}
       />

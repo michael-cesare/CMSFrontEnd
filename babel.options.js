@@ -7,8 +7,8 @@ function isWebpack(caller) {
 }
 
 module.exports = api => {
-  const web = api.caller(isWebTarget)
-  const webpack = api.caller(isWebpack)
+  const web = isWebTarget(api);
+  const webpack = isWebpack(api);
 
   return {
     presets: [

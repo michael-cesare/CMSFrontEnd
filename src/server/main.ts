@@ -7,11 +7,14 @@ const initNode = () => {
   const app = express()
 
   app.use(favIconRoute);
-  app.use('/dist', express.static('public/dist'));
+  app.use('/client', express.static('lib/client'));
+  app.use('/src', express.static('lib/client'));
+  app.use('/lib', express.static('lib'));
+  app.use(express.static('lib/server'));
 
   // ---- errorHandler for unhandledRejection ----
   process.on('unhandledRejection', (err:any) => {
-    const error = `[unhandledRejection] ${JSON.stringify(err)}` || err.message;
+    const error = `[unhandledRejection] ${err.message || JSON.stringify(err)}`;
     console.log(error);
   });
 

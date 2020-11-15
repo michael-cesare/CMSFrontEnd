@@ -1,9 +1,29 @@
 {
+  "extends": [
+    "airbnb-typescript",
+    "airbnb/hooks"
+  ],
   "env": {
-    "browser": true
+    "es6": true,
+    "browser": true,
+    "node": true,
   },
   "rules": {
+    "react/prefer-stateless-function": 0,
     "import/no-unresolved": "off",
-    "import/no-extraneous-dependencies": "off"
+    "import/no-extraneous-dependencies": "off",
+    "react/forbid-prop-types": 2,
+    "class-methods-use-this": 0,
+    "import/prefer-default-export": 0,
+    "no-underscore-dangle": 0,
+    "max-len": 0,
+    "indent": ["warn", 2],
+    "no-tabs": 0,
+    "no-plusplus": 0,
+    "linebreak-style": 0,
+    "no-restricted-syntax": 0,
+    "no-prototype-builtins": 0,
+    "react/jsx-no-target-blank": 0,
+    "newline-before-return": 2
   }
 }

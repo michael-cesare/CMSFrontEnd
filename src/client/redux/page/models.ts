@@ -1,9 +1,9 @@
 import { IAction } from '@redux/models';
+import { IPage } from '@client/types';
 
-export interface IPageState {
-  type: string
+export interface IPageState extends IPage {
 }
 
-export interface ISetPageTypeAction extends IAction {
-  payload: string;
+export interface ISetPageAction extends IAction {
+  payload: IPage;
 }

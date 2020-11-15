@@ -1,31 +1,31 @@
 
-import React, { Component } from "react";
+import React from "react";
 import { connect } from 'react-redux';
 
-import { IWPPage } from '@srcTypes/models';
 import { IAppState } from '@redux/models';
 
-import { pageDataSel } from '@client/redux/nodeState/selectors';
-import { pageTypeSel } from '@redux/page/selectors';
+import { pageDataSel } from '@redux/page/selectors';
 
-import Page from '@components/Page';
+import Page from '@client/components/Page/Page';
+
+import { IPage } from '@client/types';
+
+import '@styles/page.scss';
 
 interface IOwnReduxStateProps {
-  pageData: IWPPage;
-  pageType: string;
+  page: IPage;
 }
 
 type TAllProps = IOwnReduxStateProps;
 
-class HomePage extends Component<TAllProps> {
+class HomePage extends React.Component<TAllProps> {
   render() {
-    const { pageData, pageType } = this.props;
+    const { page } = this.props;
 
     return (
       <div className="homePage">
         <Page
-          pageType={pageType}
-          pageData={pageData}
+          page={page}
         />
       </div>
     );
@@ -33,8 +33,7 @@ class HomePage extends Component<TAllProps> {
 }
 
 const mapStateToProps = ( state: IAppState ): IOwnReduxStateProps => ( {
-  pageData: pageDataSel( state ),
-  pageType: pageTypeSel( state ),
+  page: pageDataSel( state ),
 } )
 
-export default connect( mapStateToProps, {} )( HomePage );
+export default connect( mapStateToProps )( HomePage );

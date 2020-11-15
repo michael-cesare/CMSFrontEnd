@@ -1,6 +1,6 @@
 const renderHtmlApp = (htmlDom:any, preloadedState:any, webExtractor:any) => {
   const nodeSSRState = preloadedState
-  ? JSON.stringify(preloadedState) // .replace(/</g, '\\u003c')
+  ? JSON.stringify(preloadedState).replace(/</g, '\\u003c')
   : {};
 
   const scriptTags = webExtractor ? webExtractor.getScriptTags() : '';

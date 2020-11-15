@@ -1,10 +1,14 @@
 import * as React from 'react'
 import { Provider } from 'react-redux';
+import { Router } from 'react-router-dom';
+import { createBrowserHistory } from 'history';
 
 import store from '@redux/createStore';
 import { setupApp } from '@redux/common/actions';
 
 import App from './App';
+
+import '@styles/global.scss';
 
 store.dispatch( setupApp() );
 
@@ -21,9 +25,15 @@ store.dispatch( setupApp() );
 //   );
 // };
 
+const customHistory = createBrowserHistory({
+  basename: '/',
+});
+
 const WebApp = () => (
   <Provider store={store}>
-    <App />
+    <Router history={customHistory}>
+      <App />
+    </Router>
   </Provider>
 );
 
