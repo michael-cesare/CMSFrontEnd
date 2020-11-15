@@ -1,5 +1,4 @@
-
-import { WORDPRESS_HOST } from "@client/config/envConfig";
+import { WORDPRESS_HOST } from "@common/config/envConfig";
 
 export const isLocalhost = (): Boolean => {
   let nodeSSRState = false;

@@ -1,0 +1,7 @@
+{
+  "SERVER_PORT": "9000",
+  "APP_ENV": "development",
+  "LOGGER_NAME": "CMSFrontend",
+  "LOGGER_LEVEL": "debug",
+  "SITE_URL": "http://localhost:9000"
+}

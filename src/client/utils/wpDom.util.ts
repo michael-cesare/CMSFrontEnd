@@ -45,7 +45,7 @@ export const parseWp = ( htmlString: string ): Array<IDomNode> => {
     .replace( /style=(['"])([ -0-9a-zA-Z:]*[ 0-9a-zA-Z;]*)*\1/g, '' )
     .replace( regexSearchStyleAttribute, '' );
 
-  const domWp = wpToDom(domFiltered, /<p>|<p>/g, '</p>');
+  const domWp = wpToDom(domFiltered, /<pageContent>|<pageContent>/g, '</pageContent>');
 
   return domWp;
 }
