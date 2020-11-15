@@ -4,9 +4,9 @@ import fetch from 'isomorphic-fetch';
 // import logger from '@util/logger.util';
 // import { isDev } from '@util/url.util';
 
-// import { SITE_URL } from "@config/envConfig";
+import { SITE_URL } from "@common/config/envConfig";
 
-const rootUrl = "http://localhost:5000"; // SITE_URL();
+const rootUrl = `http://${SITE_URL()}`;
 
 const EFetchMethods = {
   get:'get',

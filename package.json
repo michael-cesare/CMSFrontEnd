@@ -7,11 +7,12 @@
   "scripts": {
     "dev": "nodemon src/server/main.ts",
     "prebuild": "rimraf r lib",
-    "build": "npm run prebuild && yarn build:webpack && yarn build:lib",
+    "build": "npm run prebuild && npm run html && yarn build:webpack && yarn build:lib",
     "build:webpack": "webpack",
     "build:lib": "babel -d lib src",
     "start": "node lib/server/NodeApp.js",
-    "start:dev": "node -r @babel/register lib/server/NodeApp.js"
+    "start:dev": "node -r @babel/register lib/server/NodeApp.js",
+    "html": "copyfiles public/**/*.* lib/"
   },
   "repository": {
     "type": "git",
@@ -44,6 +45,7 @@
     "@types/react-router-dom": "^5.1.6",
     "@types/redux-immutable": "^4.0.1",
     "babel-loader": "^8.0.6",
+    "copyfiles": "^2.4.0",
     "css-loader": "^0.26.1",
     "file-loader": "^6.0.0",
     "html-loader": "^1.1.0",
@@ -68,6 +70,7 @@
     "webpack-node-externals": "^1.7.2"
   },
   "dependencies": {
+    "@types/cors": "^2.8.8",
     "@babel/preset-typescript": "^7.12.1",
     "@babel/register": "^7.12.1",
     "@types/react-dom": "^16.9.9",
@@ -76,6 +79,8 @@
     "express": "^4.16.4",
     "immutability-helper": "^3.0.2",
     "babel-plugin-react-css-modules": "^5.2.6",
+    "body-parser": "^1.19.0",
+    "cors": "^2.8.5",
     "immutable": "^4.0.0-rc.12",
     "isomorphic-fetch": "^2.2.1",
     "module-alias": "^2.2.2",
@@ -102,6 +107,7 @@
     "react-router-redux": "^4.0.8",
     "redux": "^4.0.5",
     "redux-immutable": "^4.0.0",
+    "winston": "^3.2.1",
     "rxjs": "^6.5.5"
   }
 }

@@ -76,7 +76,11 @@ const getConfig = target => ({
         // /^lodash.debounce$/,
       ],
     }),
-  ] : undefined,
+  ] : { 
+    node: {
+      fs: 'empty', // dont use fs on browser.. use only by node.
+    },
+  },
 
   // optimization: {
   //   runtimeChunk: target !== 'node',
@@ -96,6 +100,7 @@ const getConfig = target => ({
       '@srcTypes': resolve(appRoot, './src/types/'),
       '@styles': resolve(appRoot, './src/static/scss/'),
       '@sconfig': resolve(appRoot, './src/config/'),
+      '@common': resolve(appRoot, './src/common/'),
     },
   },
 
