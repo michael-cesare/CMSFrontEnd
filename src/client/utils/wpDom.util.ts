@@ -18,8 +18,8 @@ export const wpToDom = ( htmlString: string, startTag: RegExp, endTag: string ):
       if ( item.includes( endTag ) ) {
         domNode = {
           id:      index,
-          content: item.substring( 0, item.indexOf( endTag ) )
-          .replace( /<(?:.|\n)*?>/gm, '' ),
+          content: item.substring( 0, item.indexOf( endTag ) ),
+          // .replace( /<(?:.|\n)*?>/gm, '' ),
         };
       } else {
         domNode = {
@@ -39,11 +39,11 @@ export const wpToDom = ( htmlString: string, startTag: RegExp, endTag: string ):
  * @param htmlString {string} - wordpress post content
  */
 export const parseWp = ( htmlString: string ): Array<IDomNode> => {
-  const regexSearchStyleAttribute = /(style="|style=')([a-zA-Z0-9-:; ]+)(["'])/gi
+  // const regexSearchStyleAttribute = /(style="|style=')([a-zA-Z0-9-:; ]+)(["'])/gi
   const domFiltered = htmlString
-    .replace( /(["'= ])(\/wp-content\/uploads)/g, getContentUploadsUrl() )
-    .replace( /style=(['"])([ -0-9a-zA-Z:]*[ 0-9a-zA-Z;]*)*\1/g, '' )
-    .replace( regexSearchStyleAttribute, '' );
+    .replace( /(["'= ])(\/wp-content\/uploads)/g, getContentUploadsUrl() );
+    // .replace( /style=(['"])([ -0-9a-zA-Z:]*[ 0-9a-zA-Z;]*)*\1/g, '' )
+    // .replace( regexSearchStyleAttribute, '' );
 
   const domWp = wpToDom(domFiltered, /<pageContent>|<pageContent>/g, '</pageContent>');
 
