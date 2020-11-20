@@ -3,7 +3,7 @@ import { map } from 'rxjs/operators';
 
 import { IAppStore } from '@redux/models';
 
-import { VMPageTypeSel, VMPageDataContentSel } from '@client/redux/nodeState/selectors';
+import { VMPageTypeSel, VMPageDataContentSel, VMPageTemplatesSel } from '@client/redux/nodeState/selectors';
 
 import pageTypes from '@redux/page/types';
 import { setPage } from '@redux/page/actions';
@@ -18,7 +18,9 @@ export const handleSetPage = ( action$: ActionsObservable<ISetPageAction>, store
   map( () => {
     const pageType = VMPageTypeSel(store.value);
     const pageText = VMPageDataContentSel(store.value);
-    const dom = parseWp(pageText);
+    const pageTemplates = VMPageTemplatesSel(store.value);
+
+    const dom = parseWp(pageText, pageTemplates);
 
     return {
       type: pageType,

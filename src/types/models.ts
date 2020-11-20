@@ -17,6 +17,7 @@ export interface IWPObject extends IObject {
   title: string;
   content: string;
   excerpt: string;
+  advanceFields?: IAdvanceField;
 }
 
 export interface IWPPost extends IWPObject {
@@ -27,6 +28,18 @@ export interface IWPPage extends IWPObject {
 
 export interface IFetchRequest {
 }
+
+export interface IAdvanceField {
+  pageTemplates: Array<IPageTemplate>,
+}
+
+export interface IPageTemplate {
+  order: number,
+  content: string,
+  placeHolder: string,
+  type: string,
+}
+
 
 export interface IFetchResponse {
   data: Array<IWPObject> | IWPObject | IWPMenu;
