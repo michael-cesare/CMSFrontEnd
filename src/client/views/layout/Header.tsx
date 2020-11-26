@@ -5,7 +5,7 @@ type TOwnProps = {
 
 const Header: FC<TOwnProps> = () => {
   return (
-    <span>test</span>
+    <span>header</span>
   );
 }
 

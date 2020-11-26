@@ -1,6 +1,6 @@
 import { IAppState } from '@redux/models';
 
-import { IWPPage, IWPMenu } from '@srcTypes/models';
+import { IWPPage, IWPMenu, IPageTemplate } from '@srcTypes/models';
 import { IPageVM } from '@srcTypes/viewModels';
 
 
@@ -28,4 +28,10 @@ export const VMPageDataContentSel = ( state: IAppState ): string => {
   const pageData = VMPageDataSel(state) as IWPPage;
 
   return pageData?.content ? pageData.content.trim() : '';
+}
+
+export const VMPageTemplatesSel = ( state: IAppState ): Array<IPageTemplate> => {
+  const pageData = VMPageDataSel(state) as IWPPage;
+
+  return pageData?.advanceFields?.pageTemplates ? pageData.advanceFields.pageTemplates : [];
 }
