@@ -1,9 +1,16 @@
 import * as React from 'react';
 
 import Content from '@components/Content';
+import Cards from '@components/CardInfo/Cards';
+import Paragraphs from '@components/Paragraphs/Paragraphs';
 
 import { IPage } from '@client/types';
-import { IPageTemplate, IPageTemplateBgImage, IPageTemplateCardInfo } from '@srcTypes/models';
+import {
+  IPageTemplate,
+  IPageTemplateBgImage,
+  IPageTemplateCardInfo,
+  IPageTemplateParagraphs,
+} from '@srcTypes/models';
 
 import { EDomTypes } from '@srcTypes/enums';
 import { removeNextString } from '@common/utils/string.util';
@@ -19,37 +26,16 @@ type TAllProps = IOwnProps;
 const Page: React.FC<TAllProps> = (props: TAllProps) => {
   const { page, advanceFields } = props;
 
-  const renderCards = (field: IPageTemplateCardInfo, index: number): JSX.Element => {
-    const { content } = field;
-
-    const Cards = content.map(( { text }, key) => (
-      <div key={key} className="card-info">
-        <Content
-          contentClass="textMultiLineEllipsis"
-        >
-          {text}
-        </Content>
-      </div>
-    ) );
-
-    return (
-      <div key={index} className="cards">
-        {Cards}
-      </div>
-    );
-  }
-
   const renderBgImage = (field: IPageTemplateBgImage, index: number): JSX.Element => {
     const { content } = field;
 
     return (
-      <div key={index}>
-        <Content
-          contentClass="textMultiLineEllipsis"
-        >
-          {content}
-        </Content>
-      </div>
+      <Content
+        contentClass="page-bg-image"
+        key={`page-content-${index}`}
+      >
+        {content}
+      </Content>
     );
   }
 
@@ -81,7 +67,16 @@ const Page: React.FC<TAllProps> = (props: TAllProps) => {
         placeHolderText = `[[${acfField.placeHolder}]]`
         const indexOf = pageContent.indexOf(placeHolderText)
         if (indexOf > -1) {
-          const field: JSX.Element = renderCards(acfField, acf.order)
+          const field: JSX.Element = <Cards pageTemplateCardInfo={acfField} index={acf.order} />
+          parsedContent.push(field);
+          pageContent = removeNextString(pageContent,  placeHolderText);
+        }
+      } else if (acf.type === EDomTypes.paragraphs) {
+        const acfField = acf as IPageTemplateParagraphs
+        placeHolderText = `[[${acfField.placeHolder}]]`
+        const indexOf = pageContent.indexOf(placeHolderText)
+        if (indexOf > -1) {
+          const field: JSX.Element = <Paragraphs paragraphs={acfField} index={acf.order} />
           parsedContent.push(field);
           pageContent = removeNextString(pageContent,  placeHolderText);
         }

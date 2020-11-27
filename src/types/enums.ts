@@ -21,6 +21,7 @@ export enum EWPTypes {
 export enum EWPAcfPlaceHolders {
   cards = 'cards',
   bgImage = 'bg-image',
+  paragraphs = 'paragraphs',
   unknown = 'unknown',
 }
 
@@ -32,6 +33,7 @@ export enum EDomTypes {
   cards = 'cards',
   cardInfo = 'card-info',
   bgImage = 'bg-image',
+  paragraphs = 'paragraphs',
   string = 'string',
-  na = 'na',
+  unknown = 'unknown',
 }
