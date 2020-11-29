@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import Content from '@components/Content';
+import Content from '@client/components/Content/Content';
 import Cards from '@components/CardInfo/Cards';
 import Paragraphs from '@components/Paragraphs/Paragraphs';
 

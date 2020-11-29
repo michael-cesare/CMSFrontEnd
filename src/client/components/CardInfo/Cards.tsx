@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import Content from '@components/Content';
+import Content from '@client/components/Content/Content';
 
 import { IPageTemplateCardInfo } from '@srcTypes/models';
 

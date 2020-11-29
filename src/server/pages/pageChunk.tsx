@@ -2,6 +2,7 @@ import React from 'react'
 import { Provider } from 'react-redux'
 import { StaticRouter } from 'react-router-dom'
 import { renderToString } from 'react-dom/server'
+import { ServerStyleSheet } from 'styled-components'
 import { ChunkExtractor } from '@loadable/server'
 import path from 'path';
 
@@ -12,9 +13,9 @@ import { setupApp } from '@redux/common/actions';
 
 import { renderHtmlApp } from './pageHtml'
 
-const webStats = path.join( process.cwd(), '/lib/client/loadable-stats.json' )
+const webStats = path.join(process.cwd(), '/lib/client/loadable-stats.json')
 
-export const renderPage = (ssrState:any, locationUrl:any) => {
+export const renderPage = (ssrState: any, locationUrl: any) => {
   const nodeState = {
     viewModel: ssrState,
   }
@@ -22,25 +23,29 @@ export const renderPage = (ssrState:any, locationUrl:any) => {
   // const storeState = Immutable.fromJS(nodeState)
   const storeState = nodeState
   const epicMiddleware = epicMiddlewares()
-  const ssrStore = createStoreSSR( nodeState, epicMiddleware )
-  runEpicMiddleware( epicMiddleware );  
-  ssrStore.dispatch( setupApp() );
+  const ssrStore = createStoreSSR(nodeState, epicMiddleware)
+  runEpicMiddleware(epicMiddleware);
+  ssrStore.dispatch(setupApp());
 
   const context = {};
 
   const webExtractor = new ChunkExtractor({ statsFile: webStats, entrypoints: ['ReactApp'] })
 
-  const AppRoute = (
+  const sheet = new ServerStyleSheet()
+  const AppRoute: JSX.Element = (
     <Provider store={ssrStore}>
       <StaticRouter location={locationUrl} context={context}>
         <NodeApp />
       </StaticRouter>
     </Provider>
   );
+  
+  const AppStyled = sheet.collectStyles(AppRoute);
+  const jsx: any = webExtractor.collectChunks(AppStyled)
 
-  const jsx: any = webExtractor.collectChunks(AppRoute)
   const htmlDom = renderToString(jsx)
-  const rtn = renderHtmlApp(htmlDom, storeState, webExtractor)
+  const styleTags = sheet.getStyleTags() // or sheet.getStyleElement();
+  const rtn = renderHtmlApp(htmlDom, storeState, webExtractor, styleTags)
 
   return rtn
 }

@@ -1,7 +1,7 @@
 import * as React from 'react';
 import styled from 'styled-components'
 
-import Content from '@components/Content';
+import Content from '@client/components/Content/Content';
 
 import { IPageTemplateParagraphs, IStyle } from '@srcTypes/models';
 
