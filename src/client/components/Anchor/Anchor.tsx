@@ -20,7 +20,7 @@ const AnchorA = styled.a`
 
 const defaultTheme: IStyle = {
   backgroundColor: 'unset',
-  padding: 'none',
+  padding: 'unset',
   color: 'rgba(0,0,0,1)',
   fontSize: '1rem',
 };

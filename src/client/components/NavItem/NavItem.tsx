@@ -22,7 +22,7 @@ const Item = styled.li`
 
 const defaultTheme: IStyle = {
   backgroundColor: 'unset',
-  padding: 'none',
+  padding: 'unset',
   color: 'rgba(0,0,0,1)',
   fontSize: '1rem',
 };
@@ -39,12 +39,12 @@ const NavItem: FC<TAllProps> = (props: TAllProps) => {
   return (
     <Item
       key={key}
-      className={contentClass}
       theme={theme}
     >
       <Anchor
         key={key}
         to={to}
+        contentClass={contentClass}
       >
         {children}
       </Anchor>

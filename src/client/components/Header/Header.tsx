@@ -39,7 +39,7 @@ const Header: FC<TAllProps> = (props: TAllProps) => {
 }
 
 const mapStateToProps = (state: IAppState): IOwnReduxStateProps => ({
-  menu: pageMenuSel(state),
+  menu:              pageMenuSel(state),
   mobileMenuVisible: mobileMenuVisibleSel(state),
 })
 

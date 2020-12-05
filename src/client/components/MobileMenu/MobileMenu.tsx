@@ -7,6 +7,7 @@ import { IWPMenu, IMenuItem } from '@srcTypes/models';
 import NavItem from '@client/components/NavItem/NavItem';
 
 import { sizeOf } from '@common/utils/core.util';
+import { isActiveRoute } from '@utils/url.util';
 
 interface IOwnProps {
   menu: IWPMenu;
@@ -23,46 +24,70 @@ class MobileMenu extends PureComponent<TAllProps> {
   }
 
   renderMenuItem(menuItem: IMenuItem) {
+    const menuClass = classNames('menu-nav-link', {
+      'menu-nav-link-active': isActiveRoute(menuItem.route),
+    });
+
     return (
       <NavItem
         key={menuItem.id}
         to={menuItem.route}
+        contentClass={menuClass}
       >
         {menuItem.title}
-      </ NavItem>
+      </NavItem>
     )
   }
 
-  renderSubMenu(menuLinks: Array<IMenuItem>) {
+  renderSubMenu(menuLinks: Array<IMenuItem>, key: number) {
     const menuComponent: any = menuLinks.map((menuItem: IMenuItem) => (
-      <ul
-        className="menu-mobile-submenu"
-        key={menuItem.id}
-      >
-        {this.renderMenuItem(menuItem)}
-        {menuItem.menu && sizeOf(menuItem.menu) > 0 && this.renderSubMenu(menuItem.menu)}
-      </ul>
-    ));
+        <>
+          {this.renderMenuItem(menuItem)}
+          {menuItem.menu && sizeOf(menuItem.menu) > 0 && this.renderSubMenu(menuItem.menu, menuItem.id)}
+        </>
+      )
+    );
 
-    return menuComponent;
+    const submenuClass = classNames('mobile-menu-submenu', {
+      'mobile-menu-submenu-root': key === -1,
+    });
+
+    return menuLinks && sizeOf(menuLinks) > 0
+      ? (
+        <ul
+          className={submenuClass}
+          key={key}
+        >
+          {menuComponent}
+        </ul>
+      )
+      : null;
   }
 
   render() {
     const { menu, mobileMenuVisible } = this.props;
 
+    // TODO - check if on mobile
     const mobileMenuClass = classNames('mobile-menu', {
-      'active': mobileMenuVisible,
+      'mobile-menu-hidden': false, //  !isMobile,
+      'mobile-menu-open': mobileMenuVisible, //  !isMobile,
     });
-    const menuClass = classNames('menu-mobile', {
-      'menu-open': mobileMenuVisible,
+
+    const menuClass = classNames('menu-list', {
+      'menu-list-open': mobileMenuVisible,
     });
 
     return (
       <div className={mobileMenuClass}>
-        <button className="icon-burger" onClick={this._toggleMenuVisible}>{'☰'}</button>
         <div className={menuClass}>
-          {menu && this.renderSubMenu(menu.menu)}
+          {menu && this.renderSubMenu(menu.menu, -1)}
         </div>
+        <button
+          className="icon-burger"
+          onClick={this._toggleMenuVisible}
+        >
+          {'☰'}
+        </button>
       </div>
     )
   }
