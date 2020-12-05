@@ -1,4 +1,4 @@
-import React, { PureComponent } from 'react';
+import React, { FC } from 'react';
 import styled from 'styled-components'
 
 import { IStyle } from '@srcTypes/models';
@@ -19,28 +19,26 @@ const ContentDiv = styled.div`
 
 const defaultTheme: IStyle = {
   backgroundColor: 'unset',
-  padding: 'none',
+  padding: 'unset',
   color: 'rgba(0,0,0,1)',
   fontSize: '1rem',
 };
 
-class Content extends PureComponent<IOwnProps> {
-  render() {
-    const {
-      contentClass, children, key, inlineStyle = {},
-    } = this.props;
+const Content: FC<IOwnProps> = (props: IOwnProps) => {
+  const {
+    contentClass, children, key, inlineStyle = {},
+  } = props;
 
-    const theme = Object.assign(defaultTheme, inlineStyle);
+  const theme = Object.assign(defaultTheme, inlineStyle);
 
-    return (
-      <ContentDiv
-        key={key}
-        className={contentClass}
-        theme={theme}
-        dangerouslySetInnerHTML={{ __html: children }}
-      />
-    );
-  }
+  return (
+    <ContentDiv
+      key={key}
+      className={contentClass}
+      theme={theme}
+      dangerouslySetInnerHTML={{ __html: children }}
+    />
+  );
 }
 
 export default Content;

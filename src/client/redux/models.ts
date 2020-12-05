@@ -3,6 +3,7 @@ import { Action } from 'redux';
 
 import { IVMNodeState, IVMNodeStore } from '@srcTypes/viewModels';
 import { IPageState } from '@redux/page/models';
+import { IUiVisibility } from '@redux/uiVisibility/models';
 
 /**
  * The CoreSate is the initial state from rehydration of persistance state that
@@ -10,6 +11,7 @@ import { IPageState } from '@redux/page/models';
  */
 export interface IAppState extends IVMNodeState {
   page: IPageState;
+  uiVisibility: IUiVisibility;
 };
 
 /**
@@ -22,4 +24,8 @@ export interface IAppStore extends IVMNodeStore {
 
 export interface IAction extends Action<any> {
   payload?: any;
+}
+
+export interface IBooleanAction extends IAction {
+  payload: boolean;
 }

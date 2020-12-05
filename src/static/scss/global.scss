@@ -3,7 +3,9 @@
 'variables',
 'mixins',
 'theme',
-'@views/layout/_layout';
+'@views/layout/_layout',
+'@components/menu/_Menu',
+'@components/MobileMenu/_MobileMenu';
 
 html {
   font-size: 2.25vh;

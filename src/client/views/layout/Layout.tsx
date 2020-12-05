@@ -1,11 +1,11 @@
 import React, { FC } from "react";
 
+import Header from '@components/Header/Header';
+import Footer from '@components/Footer/Footer';
 import PageBody from './PageBody';
-import Header from './Header';
-import Footer from './Footer';
 
 const Layout: FC<any> = () => (
-  <div className="layout" >
+  <div className="layout">
     <Header />
     <PageBody />
     <Footer />
