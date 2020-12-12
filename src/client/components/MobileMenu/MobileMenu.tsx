@@ -30,7 +30,7 @@ class MobileMenu extends PureComponent<TAllProps> {
 
     return (
       <NavItem
-        key={menuItem.id}
+        id={menuItem.id}
         to={menuItem.route}
         contentClass={menuClass}
       >
@@ -40,11 +40,11 @@ class MobileMenu extends PureComponent<TAllProps> {
   }
 
   renderSubMenu(menuLinks: Array<IMenuItem>, key: number) {
-    const menuComponent: any = menuLinks.map((menuItem: IMenuItem) => (
-        <>
+    const menuComponent: any = menuLinks.map((menuItem: IMenuItem, index: number) => (
+        <React.Fragment key={`${key}-${index}`}>
           {this.renderMenuItem(menuItem)}
           {menuItem.menu && sizeOf(menuItem.menu) > 0 && this.renderSubMenu(menuItem.menu, menuItem.id)}
-        </>
+        </React.Fragment>
       )
     );
 
@@ -79,10 +79,14 @@ class MobileMenu extends PureComponent<TAllProps> {
 
     return (
       <div className={mobileMenuClass}>
-        <div className={menuClass}>
+        <div
+          key="menu-list"
+          className={menuClass
+        }>
           {menu && this.renderSubMenu(menu.menu, -1)}
         </div>
         <button
+          key="icon-burger"
           className="icon-burger"
           onClick={this._toggleMenuVisible}
         >

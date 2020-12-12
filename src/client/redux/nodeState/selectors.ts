@@ -1,7 +1,7 @@
 import { IAppState } from '@redux/models';
 
 import { IWPPage, IWPMenu, IPageTemplate, IWPPosts } from '@srcTypes/models';
-import { IPageVM } from '@srcTypes/viewModels';
+import { IPageVM, IPostVM } from '@srcTypes/viewModels';
 
 
 export const pageMenuSel = ( state: IAppState ): IWPMenu => {
@@ -22,6 +22,12 @@ export const VMPageDataSel = ( state: IAppState ): IWPPage => {
   const pageVM = state.viewModel as IPageVM;
 
   return pageVM.page.data as IWPPage;
+}
+
+export const VMPostsDataSel = ( state: IAppState ): IWPPosts => {
+  const postVM = state.viewModel as IPostVM;
+
+  return postVM.posts.data as IWPPosts;
 }
 
 /**

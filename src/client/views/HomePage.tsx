@@ -21,8 +21,7 @@ interface IOwnReduxStateProps {
 }
 
 type TAllProps = IOwnReduxStateProps;
-
-class HomePage extends React.Component<TAllProps> {
+class HomePage extends React.PureComponent<TAllProps> {
   render() {
     const { page, advanceFields, pagePosts } = this.props;
 

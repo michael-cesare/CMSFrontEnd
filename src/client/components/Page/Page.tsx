@@ -177,6 +177,7 @@ const Page: React.FC<TAllProps> = (props: TAllProps) => {
         }
       }
     } else {
+     
       handleAcfComponents(acfPageTemplate, pageContent, handleComponent);
     }
   }
@@ -203,7 +204,6 @@ const Page: React.FC<TAllProps> = (props: TAllProps) => {
   const PageDomNodes = (): JSX.Element => {
     const { domNodes } = page;
     const domList: JSX.Element[] = [];
-
     domNodes.forEach((domNode) => {
       const ComponentsToRender = acfTemplatesFactory(domNode.content)
 

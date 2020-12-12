@@ -10,7 +10,7 @@ export const mapPostsToCards = (posts: IWPPost[]): Array<ICardInfo> => {
     const cardInfo = {
       title: post.title,
       image: post.thumbnail,
-      text: post.content,
+      text: post.content.trim(),
       buttonLink: post.link,
     } as ICardInfo;
 
