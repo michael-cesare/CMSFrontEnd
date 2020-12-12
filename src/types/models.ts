@@ -2,32 +2,46 @@
 //  -------------    WordPress Objects    -------------------
 
 export interface IObject {
+  type: string,
 }
 
 export interface IWPMenu extends IObject {
-  type: string;
-  menu: Array<IMenuItem>;
+  type: string,
+  menu: Array<IMenuItem>,
+  postTypes: Array<string>,
 }
 
 export interface IWPObject extends IObject {
-  id: number;
-  slug: number;
-  date: string;
-  type: string;
-  title: string;
-  content: string;
-  excerpt: string;
-  advanceFields?: IAdvanceField;
+  id: number,
+  slug: string,
+  date: string,
+  title: string,
+  content: string,
+  excerpt: string,
 }
 
 export interface IWPPost extends IWPObject {
+  modified: string,
+  status: string,
+  author: number,
+  link: string,
+  thumbnail: string,
+}
+
+export interface IWPPosts extends IObject {
+  postCount: number,
+  foundPosts: number,
+  maxNumPages: number,
+  posts: Array<IWPPost>,
 }
 
 export interface IWPPage extends IWPObject {
+  advanceFields?: IAdvanceField,
+  pagePosts?: Array<IWPPosts>,
 }
 
 export interface IAdvanceField {
-  pageTemplates: Array<IPageTemplate>,
+  pageTemplates: Array<IPageTemplate<any>>,
 }
 
 //  -------------    Wordpress Request and Response    -------------------
@@ -36,8 +50,8 @@ export interface IFetchRequest {
 }
 
 export interface IFetchResponse {
-  data: Array<IWPObject> | IWPObject | IWPMenu;
-  errors: Array<IError>;
+  data: Array<IWPObject> | IWPObject | IWPMenu | IWPPosts,
+  errors: Array<IError>,
 }
 
 export interface IError {
@@ -86,29 +100,32 @@ export interface IParagraphsTitle {
 /**
  * Every ACF in page_template, must have the listed attibutes as a base object
  * 
- * order       order to sort the component for viewing
- * placeHolder text in wordpress page content to be replaced by this page template content
- * type        type to define sub type of acf. sometimes it's value is the same as placeholder.
- *             There is also a specific parser for each different type to generate html.
+ * order                order to sort the component for viewing
+ * placeHolder          text in wordpress page content to be replaced by this page template content
+ * type                 this is the main type of this acf. type to define sub type of acf. sometimes it's value is the same as placeholder.
+ *                      There is also a specific parser for each different type to generate html.
+ * content              The base content to be extended by children. fill html in page using its json data.
+ * contentPostTypeQuery Custom Post Types query. When provided,
+ *                      content attribute is ignored and it will try to fetch posts by its post type and query.
+ * style                General Syling for the component, this is optional.
  */
-export interface IPageTemplate {
+export interface IPageTemplate<T> {
   order: number,
   placeHolder: string,
   type: string,
+  content: T,
+  contentPostTypeQuery?: IFetchPostsRequest,
   style?: IStyle,
 }
 
-export interface IPageTemplateCardInfo extends IPageTemplate {
-  content: Array<ICardInfo>,
+export interface IPageTemplateCardInfo extends IPageTemplate<Array<ICardInfo>> {
 }
 
-export interface IPageTemplateParagraphs extends IPageTemplate {
-  content: Array<IParagraph>,
+export interface IPageTemplateParagraphs extends IPageTemplate<Array<IParagraph>> {
   title: IParagraphsTitle,
 }
 
-export interface IPageTemplateBgImage extends IPageTemplate {
-  content: string,
+export interface IPageTemplateBgImage extends IPageTemplate<string> {
 }
 
 //  -------------    OTHER  Objects   -------------------
@@ -129,5 +146,5 @@ export interface IMenuItem {
   url: string,
   slug: string,
   route: string,
-  menu: Array<IMenuItem>;
+  menu: Array<IMenuItem>
 }

@@ -24,7 +24,6 @@ export const getContentUploadsUrl = (): string => {
   return `${getContentUrl()}/wp-content/uploads`;
 }
 
-
 export const isActiveRoute = (route: string) => {
   let returnResult = false;
   if (typeof window !== 'undefined' && window) {

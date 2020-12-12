@@ -10,8 +10,19 @@ export enum EWPTypes {
   menu = 'menu',
   post = 'post',
   posts = 'posts',
+  career = 'career',
+  careers = 'careers',
   page = 'page',
   unknown = 'unknown',
+}
+
+/**
+ * Errors and codes
+ */
+export enum EErrorsCodes {
+  SomethingWentWrong = '900',
+  FailedFetch = '901',
+  FileNotFound = '902',
 }
 
 /**
@@ -36,4 +47,5 @@ export enum EDomTypes {
   paragraphs = 'paragraphs',
   string = 'string',
   unknown = 'unknown',
+  postType = 'postType',
 }

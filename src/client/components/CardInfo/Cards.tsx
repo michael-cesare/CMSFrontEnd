@@ -2,22 +2,20 @@ import * as React from 'react';
 
 import Content from '@client/components/Content/Content';
 
-import { IPageTemplateCardInfo } from '@srcTypes/models';
+import { ICardInfo } from '@srcTypes/models';
 
 interface IOwnProps {
-  pageTemplateCardInfo: IPageTemplateCardInfo,
+  cardInfoList: Array<ICardInfo>,
   index?: number;
 }
 
 type TAllProps = IOwnProps;
 
 const Cards: React.FC<TAllProps> = (props: TAllProps) => {
-  const { pageTemplateCardInfo, index } = props;
+  const { cardInfoList, index } = props;
 
   const renderCards = (): JSX.Element[] => {
-    const { content } = pageTemplateCardInfo;
-
-    return content.map(( { text }, key) => (
+    return cardInfoList?.map && cardInfoList.map(( { text }, key) => (
       <Content
         key={`card-info-${key}`}
         contentClass="card-info"

@@ -6,7 +6,7 @@ import fetch from 'isomorphic-fetch';
 
 import { SITE_URL } from "@common/config/envConfig";
 
-const rootUrl = `http://${SITE_URL()}`;
+const rootUrl = `http://${SITE_URL()}/api/wp/`;
 
 const EFetchMethods = {
   get:'get',
