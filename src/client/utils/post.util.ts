@@ -1,4 +1,6 @@
-import { IWPPost, ICardInfo } from '@srcTypes/models';
+import { IWPPost, ICardInfo } from '@srcTypes/models'
+
+import { parsePostLink, parseWPImageLink } from '@utils/wpDom.util'
 
 /**
  * maps posts to card info objects
@@ -9,12 +11,12 @@ export const mapPostsToCards = (posts: IWPPost[]): Array<ICardInfo> => {
   posts.forEach((post: IWPPost) => {
     const cardInfo = {
       title: post.title,
-      image: post.thumbnail,
+      image: parseWPImageLink(post.thumbnail),
       text: post.content.trim(),
-      buttonLink: post.link,
-    } as ICardInfo;
+      buttonLink: parsePostLink(post.link),
+    } as ICardInfo
 
     cardInfoList.push(cardInfo)
   })
-  return cardInfoList;
+  return cardInfoList
 }

@@ -1,7 +1,8 @@
-import { IDom, IDomString } from '@client/types';
-import { EDomTypes } from '@srcTypes/enums';
+import { IDom, IDomString } from '@client/types'
+import { EDomTypes } from '@srcTypes/enums'
 
-import { getContentUploadsUrl } from '@utils/url.util';
+import { SITE_URL } from "@common/config/envConfig"
+import { getContentUploadsUrl, getContentUrl } from '@utils/url.util'
 
 /**
  * Converts wordpress post content to desired format
@@ -15,10 +16,10 @@ export const wpToDom = (htmlString: string, startTag: RegExp, endTag: string): A
   htmlString
     .split(startTag)
     .map((item: string, index: number) => {
-      let domNode: IDom;
+      let domNode: IDom
       let content = ''
       if (item.includes(endTag)) {
-        content = item.substring(0, item.indexOf(endTag));
+        content = item.substring(0, item.indexOf(endTag))
         domNode = {
           id: index,
           content,
@@ -31,12 +32,12 @@ export const wpToDom = (htmlString: string, startTag: RegExp, endTag: string): A
           id: -1,
           content,
           type: EDomTypes.string,
-        } as IDom;
+        } as IDom
       }
 
-      return domNode;
+      return domNode
     })
-    .filter((item: IDomString) => item.id !== -1);
+    .filter((item: IDomString) => item.id !== -1)
 
 /**
  * Converts wordpress post content to desired format
@@ -45,13 +46,38 @@ export const wpToDom = (htmlString: string, startTag: RegExp, endTag: string): A
  * @param htmlString {string} - wordpress post content
  */
 export const parseWp = (htmlString: string): Array<IDomString> => {
-  // const regexSearchStyleAttribute = /(style="|style=')([a-zA-Z0-9-:; ]+)(["'])/gi
+  // const regexSearchStyleAttribute = /(style="|style=')([a-zA-Z0-9-: ]+)(["'])/gi
   const domFiltered = htmlString
-    .replace(/(["'= ])(\/wp-content\/uploads)/g, getContentUploadsUrl());
-  // .replace( /style=(['"])([ -0-9a-zA-Z:]*[ 0-9a-zA-Z;]*)*\1/g, '' )
-  // .replace( regexSearchStyleAttribute, '' );
+    .replace(/(["'= ])(\/wp-content\/uploads)/g, getContentUploadsUrl())
+  // .replace( /style=(['"])([ -0-9a-zA-Z:]*[ 0-9a-zA-Z]*)*\1/g, '' )
+  // .replace( regexSearchStyleAttribute, '' )
 
-  const domWp = wpToDom(domFiltered, /<pageContent>|<pageContent>/g, '</pageContent>');
+  const domWp = wpToDom(domFiltered, /<pageContent>|<pageContent>/g, '</pageContent>')
 
-  return domWp;
+  return domWp
+}
+
+/**
+ * Converts wordpress post url to desired frontend url
+ * @method parsePostLink
+ * @category wpDom
+ * @param htmlString {string} - wordpress post content
+ */
+export const parsePostLink = (wordpressLink: string): string => {
+  const contentUrl = getContentUrl()
+  const frontendUrl = `//${SITE_URL()}`
+  const regex = new RegExp(contentUrl, 'g')
+  const frontEndLink = wordpressLink.replace(regex, frontendUrl)
+
+  return frontEndLink
+}
+
+/**
+ * Converts wordpress image url to desired frontend url
+ * @method parseWPImageLink
+ * @category wpDom
+ * @param htmlString {string} - wordpress post content
+ */
+export const parseWPImageLink = (wordpressLink: string): string => {
+  return wordpressLink.replace(/(["'= ])(\/wp-content\/uploads)/g, getContentUploadsUrl())
 }

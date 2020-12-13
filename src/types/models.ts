@@ -55,14 +55,14 @@ export interface IFetchResponse {
 }
 
 export interface IError {
-  code: any;
-  info: string;
+  code: any
+  info: string
 }
 
 export interface IFetchPostsRequest extends IFetchRequest {
-  searchCount: number;
-  postType: string;
-  postSlug: string;
+  searchCount: number
+  postType: string
+  postSlug: string
   sortOrder: string,
   pageSize: number,
   pageIndex: number,
@@ -71,8 +71,8 @@ export interface IFetchPostsRequest extends IFetchRequest {
 }
 
 export interface IFetchPostsResponse extends IFetchResponse {
-  params: IFetchPostsRequest;
-  searchCount: number;
+  params: IFetchPostsRequest
+  searchCount: number
 }
 
 

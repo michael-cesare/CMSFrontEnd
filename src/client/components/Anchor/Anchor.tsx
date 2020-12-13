@@ -36,12 +36,13 @@ const Anchor: FC<TAllProps> = (props: TAllProps) => {
 
   return (
     <AnchorA
-      key={id}
+      key={`AnchorA-${id}`}
       className={contentClass}
       href={to}
       theme={theme}
-      dangerouslySetInnerHTML={{ __html: children }}
-    />
+    >
+      {children}
+    </AnchorA>
   );
 }
 

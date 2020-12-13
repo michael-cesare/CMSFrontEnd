@@ -1,10 +1,10 @@
-import * as React from 'react';
+import * as React from 'react'
 
-import Content from '@client/components/Content/Content';
-import Cards from '@components/CardInfo/Cards';
-import Paragraphs from '@components/Paragraphs/Paragraphs';
+import Content from '@client/components/Content/Content'
+import Cards from '@components/CardInfo/Cards'
+import Paragraphs from '@components/Paragraphs/Paragraphs'
 
-import { IPage } from '@client/types';
+import { IPage } from '@client/types'
 import {
   IPageTemplate,
   IPageTemplateBgImage,
@@ -13,14 +13,14 @@ import {
   IWPPosts,
   IWPPost,
   ICardInfo,
-} from '@srcTypes/models';
+} from '@srcTypes/models'
 
-import { EDomTypes } from '@srcTypes/enums';
-import { removeNextString } from '@common/utils/string.util';
-import { orderByKey } from '@common/utils/array.util';
-import { isEmpty, sizeOf } from '@common/utils/core.util';
+import { EDomTypes } from '@srcTypes/enums'
+import { removeNextString } from '@common/utils/string.util'
+import { orderByKey } from '@common/utils/array.util'
+import { isEmpty, sizeOf } from '@common/utils/core.util'
 
-import { mapPostsToCards } from '@utils/post.util';
+import { mapPostsToCards } from '@utils/post.util'
 
 interface ITemplateComponent {
   pageContent: string,
@@ -36,7 +36,7 @@ interface IOwnProps {
 type TAllProps = IOwnProps
 
 const Page: React.FC<TAllProps> = (props: TAllProps) => {
-  const { page, advanceFields, pagePosts } = props;
+  const { page, advanceFields, pagePosts } = props
 
   const findPostTypePosts = (postType: string, pagePostTypesPosts: Array<IWPPosts>): undefined | IWPPosts => {
     let result: undefined | IWPPosts
@@ -53,8 +53,8 @@ const Page: React.FC<TAllProps> = (props: TAllProps) => {
     pageTemplateBgImage: IPageTemplateBgImage,
     bgImage: string
   ): ITemplateComponent => {
-    const placeHolderText: string = `[[${pageTemplateBgImage.placeHolder}]]`;
-    const indexOf = pageContent.indexOf(placeHolderText);
+    const placeHolderText: string = `[[${pageTemplateBgImage.placeHolder}]]`
+    const indexOf = pageContent.indexOf(placeHolderText)
     let element: JSX.Element | undefined
     if (indexOf > -1) {
       element = (
@@ -65,23 +65,23 @@ const Page: React.FC<TAllProps> = (props: TAllProps) => {
           {bgImage}
         </Content>
       )
-      pageContent = removeNextString(pageContent, placeHolderText);
+      pageContent = removeNextString(pageContent, placeHolderText)
     }
-    return { pageContent, element };
+    return { pageContent, element }
   }
 
   const getParagraphs = (
     pageContent: string,
     pageTemplateParagraphs: IPageTemplateParagraphs
   ): ITemplateComponent => {
-    const placeHolderText: string = `[[${pageTemplateParagraphs.placeHolder}]]`;
-    const indexOf = pageContent.indexOf(placeHolderText);
+    const placeHolderText: string = `[[${pageTemplateParagraphs.placeHolder}]]`
+    const indexOf = pageContent.indexOf(placeHolderText)
     let element: JSX.Element | undefined
     if (indexOf > -1) {
-      element = <Paragraphs paragraphs={pageTemplateParagraphs} index={pageTemplateParagraphs.order} />;
-      pageContent = removeNextString(pageContent, placeHolderText);
+      element = <Paragraphs paragraphs={pageTemplateParagraphs} index={pageTemplateParagraphs.order} />
+      pageContent = removeNextString(pageContent, placeHolderText)
     }
-    return { pageContent, element };
+    return { pageContent, element }
   }
 
   const getCards = (
@@ -89,14 +89,14 @@ const Page: React.FC<TAllProps> = (props: TAllProps) => {
     pageTemplateCardInfo: IPageTemplateCardInfo,
     cardInfoList: Array<ICardInfo>
   ): ITemplateComponent => {
-    const placeHolderText: string = `[[${pageTemplateCardInfo.placeHolder}]]`;
-    const indexOf = pageContent.indexOf(placeHolderText);
+    const placeHolderText: string = `[[${pageTemplateCardInfo.placeHolder}]]`
+    const indexOf = pageContent.indexOf(placeHolderText)
     let element: JSX.Element | undefined
     if (indexOf > -1) {
-      element = <Cards cardInfoList={cardInfoList} index={pageTemplateCardInfo.order} />;
-      pageContent = removeNextString(pageContent, placeHolderText);
+      element = <Cards cardInfoList={cardInfoList} index={pageTemplateCardInfo.order} />
+      pageContent = removeNextString(pageContent, placeHolderText)
     }
-    return { pageContent, element };
+    return { pageContent, element }
   }
 
   /**
@@ -113,9 +113,9 @@ const Page: React.FC<TAllProps> = (props: TAllProps) => {
     handleComponent: CallableFunction
   ) => {
     if (acfPageTemplate.type === EDomTypes.cards) {
-      const pageTemplateCardInfo = acfPageTemplate as IPageTemplateCardInfo;
-      const cardInfoList: Array<ICardInfo> = mapPostsToCards(posts);
-      handleComponent(getCards(pageContent, pageTemplateCardInfo, cardInfoList));
+      const pageTemplateCardInfo = acfPageTemplate as IPageTemplateCardInfo
+      const cardInfoList: Array<ICardInfo> = mapPostsToCards(posts)
+      handleComponent(getCards(pageContent, pageTemplateCardInfo, cardInfoList))
     }
   }
 
@@ -131,14 +131,14 @@ const Page: React.FC<TAllProps> = (props: TAllProps) => {
     handleComponent: CallableFunction
   ) => {
     if (acfPageTemplate.type === EDomTypes.bgImage) {
-      const pageTemplateBgImage = acfPageTemplate as IPageTemplateBgImage;
-      handleComponent(getBgImage(pageContent, pageTemplateBgImage, pageTemplateBgImage.content));
+      const pageTemplateBgImage = acfPageTemplate as IPageTemplateBgImage
+      handleComponent(getBgImage(pageContent, pageTemplateBgImage, pageTemplateBgImage.content))
     } else if (acfPageTemplate.type === EDomTypes.cards) {
-      const pageTemplateCardInfo = acfPageTemplate as IPageTemplateCardInfo;
-      handleComponent(getCards(pageContent, pageTemplateCardInfo, pageTemplateCardInfo.content));
+      const pageTemplateCardInfo = acfPageTemplate as IPageTemplateCardInfo
+      handleComponent(getCards(pageContent, pageTemplateCardInfo, pageTemplateCardInfo.content))
     } else if (acfPageTemplate.type === EDomTypes.paragraphs) {
-      const pageTemplateParagraphs = acfPageTemplate as IPageTemplateParagraphs;
-      handleComponent(getParagraphs(pageContent, pageTemplateParagraphs));
+      const pageTemplateParagraphs = acfPageTemplate as IPageTemplateParagraphs
+      handleComponent(getParagraphs(pageContent, pageTemplateParagraphs))
     }
   }
 
@@ -159,26 +159,26 @@ const Page: React.FC<TAllProps> = (props: TAllProps) => {
      */
     const handleComponent = (componentToRender: ITemplateComponent | undefined) => {
       if (componentToRender && componentToRender.element) {
-        pageContent = componentToRender.pageContent;
-        handleElement(componentToRender.element);
+        pageContent = componentToRender.pageContent
+        handleElement(componentToRender.element)
       }
     }
 
     // The current ACF template is a 'postType' posts, or else it is from the ACF attributes.
-    const isPostTypePosts: boolean = !isEmpty(acfPageTemplate?.contentPostTypeQuery?.postType);
+    const isPostTypePosts: boolean = !isEmpty(acfPageTemplate?.contentPostTypeQuery?.postType)
     if (isPostTypePosts) {
-      const { contentPostTypeQuery } = acfPageTemplate;
+      const { contentPostTypeQuery } = acfPageTemplate
       if (sizeOf(pagePosts) > 0 && contentPostTypeQuery?.postType) {
-        const { postType } = contentPostTypeQuery;
-        const postTypePosts = findPostTypePosts(postType, pagePosts);
+        const { postType } = contentPostTypeQuery
+        const postTypePosts = findPostTypePosts(postType, pagePosts)
         if (postTypePosts && sizeOf(postTypePosts.posts) > 0) {
-          const { posts } = postTypePosts;
-          handlePostTypePosts(acfPageTemplate, pageContent, posts, handleComponent);
+          const { posts } = postTypePosts
+          handlePostTypePosts(acfPageTemplate, pageContent, posts, handleComponent)
         }
       }
     } else {
      
-      handleAcfComponents(acfPageTemplate, pageContent, handleComponent);
+      handleAcfComponents(acfPageTemplate, pageContent, handleComponent)
     }
   }
 
@@ -193,30 +193,30 @@ const Page: React.FC<TAllProps> = (props: TAllProps) => {
     const acfPageTemplatesSorted = advanceFields.sort((a: any, b: any) => orderByKey(a, b, 'order'))
 
     const addElement = (element: JSX.Element) => {
-      parsedContent.push(element);
+      parsedContent.push(element)
     }
 
     acfPageTemplatesSorted.forEach((acfPageTemplate: IPageTemplate<any>) => parseACFTemplete(pageContent, acfPageTemplate, addElement))
 
-    return parsedContent;
+    return parsedContent
   }
 
   const PageDomNodes = (): JSX.Element => {
-    const { domNodes } = page;
-    const domList: JSX.Element[] = [];
+    const { domNodes } = page
+    const domList: JSX.Element[] = []
     domNodes.forEach((domNode) => {
       const ComponentsToRender = acfTemplatesFactory(domNode.content)
 
       if (ComponentsToRender) {
-        ComponentsToRender.forEach((component) => domList.push(component));
+        ComponentsToRender.forEach((component) => domList.push(component))
       }
-    });
+    })
 
     return (
       <div>
         {domList}
       </div>
-    );
+    )
   }
 
   return (
