@@ -7,7 +7,7 @@ interface IOwnProps {
   to: string;
   contentClass?: string;
   children: any;
-  key: any;
+  id: number;
   inlineStyle?: IStyle;
 }
 
@@ -29,19 +29,20 @@ type TAllProps = IOwnProps;
 
 const Anchor: FC<TAllProps> = (props: TAllProps) => {
   const {
-    to, contentClass = '', children, key, inlineStyle = {},
+    to, contentClass = '', children, id, inlineStyle = {},
   } = props;
 
   const theme = Object.assign(defaultTheme, inlineStyle);
 
   return (
     <AnchorA
-      key={key}
+      key={`AnchorA-${id}`}
       className={contentClass}
       href={to}
       theme={theme}
-      dangerouslySetInnerHTML={{ __html: children }}
-    />
+    >
+      {children}
+    </AnchorA>
   );
 }
 

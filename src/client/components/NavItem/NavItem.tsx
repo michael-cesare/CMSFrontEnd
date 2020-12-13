@@ -9,7 +9,7 @@ interface IOwnProps {
   to: string;
   contentClass?: string;
   children: any;
-  key: any;
+  id: number;
   inlineStyle?: IStyle;
 }
 
@@ -31,18 +31,18 @@ type TAllProps = IOwnProps;
 
 const NavItem: FC<TAllProps> = (props: TAllProps) => {
   const {
-    to, contentClass = '', children, key, inlineStyle = {},
+    to, contentClass = '', children, id, inlineStyle = {},
   } = props;
 
   const theme = Object.assign(defaultTheme, inlineStyle);
 
   return (
     <Item
-      key={key}
+      key={id}
       theme={theme}
     >
       <Anchor
-        key={key}
+        id={id}
         to={to}
         contentClass={contentClass}
       >
