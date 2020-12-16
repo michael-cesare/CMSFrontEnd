@@ -1,6 +1,6 @@
 import * as React from 'react'
 
-import Content from '@client/components/Content/Content'
+import Content from '@components/Content/Content'
 
 import { IWPPost } from '@srcTypes/models'
 
@@ -26,7 +26,7 @@ const Post: React.FC<TAllProps> = (props: TAllProps) => {
     return !isEmpty(content) && (
       <Content
         contentClass={`post-content-${slug}`}
-        key={`post-content-${slug}`}
+        uid={`post-content-${slug}`}
       >
         {content}
       </Content>

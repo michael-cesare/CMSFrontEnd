@@ -11,7 +11,7 @@ import { mobileMenuVisibleSel } from '@client/redux/uiVisibility/selectors';
 
 import { IWPMenu } from '@srcTypes/models';
 
-import Menu from '@client/components/Menu/Menu';
+import Menu from '@components/Menu/Menu';
 
 interface IOwnReduxStateProps {
   menu: IWPMenu;

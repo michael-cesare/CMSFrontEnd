@@ -1,7 +1,7 @@
 import * as React from 'react'
 
-import Content from '@client/components/Content/Content'
 import Cards from '@components/CardInfo/Cards'
+import BgImage from '@components/BgImage/BgImage'
 import Paragraphs from '@components/Paragraphs/Paragraphs'
 
 import { IPage } from '@client/types'
@@ -13,6 +13,7 @@ import {
   IWPPosts,
   IWPPost,
   ICardInfo,
+  IBgImage,
 } from '@srcTypes/models'
 
 import { EDomTypes } from '@srcTypes/enums'
@@ -51,19 +52,18 @@ const Page: React.FC<TAllProps> = (props: TAllProps) => {
   const getBgImage = (
     pageContent: string,
     pageTemplateBgImage: IPageTemplateBgImage,
-    bgImage: string
+    bgImage: IBgImage
   ): ITemplateComponent => {
     const placeHolderText: string = `[[${pageTemplateBgImage.placeHolder}]]`
     const indexOf = pageContent.indexOf(placeHolderText)
     let element: JSX.Element | undefined
     if (indexOf > -1) {
       element = (
-        <Content
-          contentClass="page-bg-image"
-          key={`page-content-${pageTemplateBgImage.order}`}
-        >
-          {bgImage}
-        </Content>
+        <BgImage
+          key={indexOf}
+          bgImage={bgImage}
+          index={indexOf}
+        />
       )
       pageContent = removeNextString(pageContent, placeHolderText)
     }
@@ -78,7 +78,13 @@ const Page: React.FC<TAllProps> = (props: TAllProps) => {
     const indexOf = pageContent.indexOf(placeHolderText)
     let element: JSX.Element | undefined
     if (indexOf > -1) {
-      element = <Paragraphs paragraphs={pageTemplateParagraphs} index={pageTemplateParagraphs.order} />
+      element = (
+        <Paragraphs
+          key={pageTemplateParagraphs.order}
+          paragraphs={pageTemplateParagraphs}
+          index={pageTemplateParagraphs.order}
+        />
+      )
       pageContent = removeNextString(pageContent, placeHolderText)
     }
     return { pageContent, element }
@@ -177,7 +183,6 @@ const Page: React.FC<TAllProps> = (props: TAllProps) => {
         }
       }
     } else {
-     
       handleAcfComponents(acfPageTemplate, pageContent, handleComponent)
     }
   }
@@ -208,7 +213,9 @@ const Page: React.FC<TAllProps> = (props: TAllProps) => {
       const ComponentsToRender = acfTemplatesFactory(domNode.content)
 
       if (ComponentsToRender) {
-        ComponentsToRender.forEach((component) => domList.push(component))
+        ComponentsToRender.forEach((component) => {
+          domList.push(component)
+        })
       }
     })
 

@@ -1,7 +1,7 @@
 import React, { FC } from "react";
 
 import { IBooleanAction } from '@redux/models';
-import MobileMenu from '@client/components/MobileMenu/MobileMenu';
+import MobileMenu from '@components/MobileMenu/MobileMenu';
 
 import { IWPMenu } from '@srcTypes/models';
 

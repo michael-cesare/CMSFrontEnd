@@ -60,9 +60,9 @@ export interface IError {
 }
 
 export interface IFetchPostsRequest extends IFetchRequest {
-  searchCount: number
-  postType: string
-  postSlug: string
+  searchCount: number,
+  postType: string,
+  postSlug: string,
   sortOrder: string,
   pageSize: number,
   pageIndex: number,
@@ -77,6 +77,17 @@ export interface IFetchPostsResponse extends IFetchResponse {
 
 
 //  -------------    ACF PageTemplates Objects   -------------------
+
+export interface IBgImageHeader {
+  text: string,
+  style: IStyle,
+}
+
+export interface IBgImage {
+  url: string,
+  header: IBgImageHeader,
+  paragraphs: Array<IParagraph>,
+}
 
 export interface ICardInfo {
   title: string,
@@ -125,7 +136,7 @@ export interface IPageTemplateParagraphs extends IPageTemplate<Array<IParagraph>
   title: IParagraphsTitle,
 }
 
-export interface IPageTemplateBgImage extends IPageTemplate<string> {
+export interface IPageTemplateBgImage extends IPageTemplate<IBgImage> {
 }
 
 //  -------------    OTHER  Objects   -------------------
@@ -135,6 +146,7 @@ export interface IStyle {
   padding: string,
   color: string,
   fontSize: string,
+  textAlign?: string,
 }
 
 export interface IMenuItem {

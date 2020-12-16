@@ -3,7 +3,7 @@ import styled from 'styled-components'
 
 import { IStyle } from '@srcTypes/models';
 
-import Anchor from '@client/components/Anchor/Anchor';
+import Anchor from '@components/Anchor/Anchor';
 
 interface IOwnProps {
   to: string;

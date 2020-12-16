@@ -1,7 +1,7 @@
 import * as React from 'react'
 
-import Content from '@client/components/Content/Content'
-import Anchor from '@client/components/Anchor/Anchor'
+import Content from '@components/Content/Content'
+import Anchor from '@components/Anchor/Anchor'
 
 import { ICardInfo } from '@srcTypes/models'
 
@@ -12,6 +12,10 @@ interface IOwnProps {
 
 type TAllProps = IOwnProps
 
+/**
+ * Cards are ideal for short information about a subject.
+ * @param props 
+ */
 const Cards: React.FC<TAllProps> = (props: TAllProps) => {
   const { cardInfoList, index } = props
 
@@ -30,13 +34,13 @@ const Cards: React.FC<TAllProps> = (props: TAllProps) => {
             className="card-info_body"
           >
             <Content
-              key={`card-info-${key}_body-title`}
+              uid={`card-info-${key}_body-title`}
               contentClass="card-info_body-title"
             >
               {title}
             </Content>
             <Content
-              key={`card-info-${key}_body-text`}
+              uid={`card-info-${key}_body-text`}
               contentClass="card-info_body-text"
             >
               {text}

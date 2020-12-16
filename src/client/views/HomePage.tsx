@@ -7,7 +7,7 @@ import { IAppState } from '@redux/models';
 import { VMPageTemplatesSel, VMPagePostsSel } from '@client/redux/nodeState/selectors';
 import { pageDataSel } from '@redux/page/selectors';
 
-import Page from '@client/components/Page/Page';
+import Page from '@components/Page/Page';
 
 import { IPage } from '@client/types';
 import { IPageTemplate, IWPPosts } from '@srcTypes/models';
