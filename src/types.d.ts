@@ -15,3 +15,13 @@ declare module '*.svg' {
   const value: any;
   export default value;
 }
+
+interface GlobalContext {
+  pathname: string;
+}
+
+declare namespace NodeJS{
+  interface Global {
+    context: GlobalContext;
+  }
+}

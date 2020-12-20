@@ -11,9 +11,9 @@ interface IOwnProps {
 }
 
 const defaultTheme: IStyle | any = {
-  backgroundColor: 'rgba(255,255,255,1)',
+  backgroundColor: 'unset',
   padding: 'unset',
-  color: 'rgba(0,0,0,1)',
+  color: 'unset',
   fontSize: '1rem',
   textAlign: 'left',
 }

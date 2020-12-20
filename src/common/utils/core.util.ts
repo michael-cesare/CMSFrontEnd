@@ -5,11 +5,10 @@ const isNullOrUndefined = (val:any) => (!!((typeof val === 'undefined' || val ==
 const isArray = (val:any) => Array.isArray( val );
 
 const isNodejs = () => {
-  const processDefined = typeof process !== 'undefined' && process && process.versions && process.versions.node;
-  // const windowDefined = typeof window === 'undefined' || window !== undefined || window !== null;
+  const processDefined = typeof process !== 'undefined'
+  const windowDefined = typeof window !== 'undefined'
 
-  // return !windowDefined && processDefined;
-  return  processDefined;
+  return !windowDefined && processDefined
 };
 
 const isReactBrowser = () => {

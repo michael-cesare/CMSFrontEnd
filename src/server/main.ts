@@ -4,6 +4,7 @@ import http from 'http';
 import cors from 'cors';
 import path from 'path';
 
+import { globalContext } from '@/server/middleware/globalContext';
 import { favIconRoute } from '@server/middleware/favIconMiddleware';
 import mainRouter from '@server/pages/mainRouter';
 
@@ -23,16 +24,16 @@ const initNode = () => {
   app.use(cors());
 
   // Recourses
-
   app.use(favIconRoute);
-
   app.use('/client', express.static('lib/client'));
   app.use('/src', express.static('lib/client'));
   app.use('/lib', express.static('lib'));
   app.use(express.static('lib/server'));
 
-  // Server Request Handlers
+  // Middleware
+  app.use(globalContext);
 
+  // Server Request Handlers
   app.use(mainRouter)
   
   // Server Start
