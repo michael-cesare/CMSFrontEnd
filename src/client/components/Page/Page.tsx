@@ -1,6 +1,7 @@
 import * as React from 'react'
 
 import Cards from '@components/CardInfo/Cards'
+import Briefs from '@components/Briefs/Briefs'
 import BgImage from '@components/BgImage/BgImage'
 import Paragraphs from '@components/Paragraphs/Paragraphs'
 
@@ -9,11 +10,14 @@ import {
   IPageTemplate,
   IPageTemplateBgImage,
   IPageTemplateCardInfo,
+  IPageTemplateIBriefs,
   IPageTemplateParagraphs,
-  IWPPosts,
   IWPPost,
+  IWPPagePosts,
   ICardInfo,
+  IBrief,
   IBgImage,
+  IStyle,
 } from '@srcTypes/models'
 
 import { EDomTypes } from '@srcTypes/enums'
@@ -21,7 +25,7 @@ import { removeNextString } from '@common/utils/string.util'
 import { orderByKey } from '@common/utils/array.util'
 import { isEmpty, sizeOf } from '@common/utils/core.util'
 
-import { mapPostsToCards } from '@utils/post.util'
+import { mapPostsToCards, mapPostsToBriefs } from '@utils/post.util'
 
 interface ITemplateComponent {
   pageContent: string,
@@ -31,7 +35,7 @@ interface ITemplateComponent {
 interface IOwnProps {
   page: IPage
   advanceFields: Array<IPageTemplate<any>>
-  pagePosts: Array<IWPPosts>
+  pagePosts: Array<IWPPagePosts>
 }
 
 type TAllProps = IOwnProps
@@ -39,14 +43,8 @@ type TAllProps = IOwnProps
 const Page: React.FC<TAllProps> = (props: TAllProps) => {
   const { page, advanceFields, pagePosts } = props
 
-  const findPostTypePosts = (postType: string, pagePostTypesPosts: Array<IWPPosts>): undefined | IWPPosts => {
-    let result: undefined | IWPPosts
-
-    if (postType) {
-      result = pagePostTypesPosts.find((postTypePosts) => postTypePosts.type === postType)
-    }
-
-    return result
+  const findPagePosts = (acfTemplateIndex: number, pagePostTypesPosts: Array<IWPPagePosts>): undefined | IWPPagePosts => {
+    return pagePostTypesPosts.find((postTypePosts) => postTypePosts.mappedIndex === acfTemplateIndex)
   }
 
   const getBgImage = (
@@ -99,7 +97,37 @@ const Page: React.FC<TAllProps> = (props: TAllProps) => {
     const indexOf = pageContent.indexOf(placeHolderText)
     let element: JSX.Element | undefined
     if (indexOf > -1) {
-      element = <Cards cardInfoList={cardInfoList} index={pageTemplateCardInfo.order} />
+      const { order } = pageTemplateCardInfo
+      element = (
+        <Cards
+          cardInfoList={cardInfoList}
+          index={order}
+        />
+      )
+      pageContent = removeNextString(pageContent, placeHolderText)
+    }
+    return { pageContent, element }
+  }
+
+  const getBriefs = (
+    pageContent: string,
+    pageTemplateBriefs: IPageTemplateIBriefs,
+    briefs: Array<IBrief>
+  ): ITemplateComponent => {
+    const placeHolderText: string = `[[${pageTemplateBriefs.placeHolder}]]`
+    const indexOf = pageContent.indexOf(placeHolderText)
+    let element: JSX.Element | undefined
+    if (indexOf > -1) {
+      const { order, style, content: { titleStyle, textStyle } } = pageTemplateBriefs
+      element = (
+        <Briefs
+          briefs={briefs}
+          index={order}
+          titleStyle={titleStyle as IStyle}
+          textStyle={textStyle as IStyle}
+          bodyStyle={style as IStyle}
+        />
+      )
       pageContent = removeNextString(pageContent, placeHolderText)
     }
     return { pageContent, element }
@@ -112,7 +140,7 @@ const Page: React.FC<TAllProps> = (props: TAllProps) => {
    * @param posts 
    * @param handleComponent 
    */
-  const handlePostTypePosts = (
+  const handleAcfPagePosts = (
     acfPageTemplate: IPageTemplate<any>,
     pageContent: string,
     posts: IWPPost[],
@@ -122,6 +150,10 @@ const Page: React.FC<TAllProps> = (props: TAllProps) => {
       const pageTemplateCardInfo = acfPageTemplate as IPageTemplateCardInfo
       const cardInfoList: Array<ICardInfo> = mapPostsToCards(posts)
       handleComponent(getCards(pageContent, pageTemplateCardInfo, cardInfoList))
+    } else if (acfPageTemplate.type === EDomTypes.briefs) {
+      const pageTemplateBriefs = acfPageTemplate as IPageTemplateIBriefs
+      const briefs: Array<IBrief> = mapPostsToBriefs(posts)
+      handleComponent(getBriefs(pageContent, pageTemplateBriefs, briefs))
     }
   }
 
@@ -155,7 +187,7 @@ const Page: React.FC<TAllProps> = (props: TAllProps) => {
    * @param acfPageTemplate The page ACF template field which holds 1 item from the array of the template fields.
    * @param handleElement callback to handle element by the caller function
    */
-  const parseACFTemplete = (content: string, acfPageTemplate: IPageTemplate<any>, handleElement: CallableFunction) => {
+  const parseACFTemplete = (content: string, acfPageTemplate: IPageTemplate<any>, acfTemplateIndex: number, handleElement: CallableFunction) => {
     let pageContent = content
 
     /**
@@ -171,16 +203,14 @@ const Page: React.FC<TAllProps> = (props: TAllProps) => {
     }
 
     // The current ACF template is a 'postType' posts, or else it is from the ACF attributes.
+    // contentPostIdsQuery is always a postTypes
     const isPostTypePosts: boolean = !isEmpty(acfPageTemplate?.contentPostTypeQuery?.postType)
-    if (isPostTypePosts) {
-      const { contentPostTypeQuery } = acfPageTemplate
-      if (sizeOf(pagePosts) > 0 && contentPostTypeQuery?.postType) {
-        const { postType } = contentPostTypeQuery
-        const postTypePosts = findPostTypePosts(postType, pagePosts)
-        if (postTypePosts && sizeOf(postTypePosts.posts) > 0) {
-          const { posts } = postTypePosts
-          handlePostTypePosts(acfPageTemplate, pageContent, posts, handleComponent)
-        }
+    const isSearchByPostIds: boolean = !isEmpty(acfPageTemplate?.contentPostIdsQuery)
+    if (sizeOf(pagePosts) > 0 && (isPostTypePosts || isSearchByPostIds)) {
+      const acfPagePosts = findPagePosts(acfTemplateIndex, pagePosts)
+      if (acfPagePosts && sizeOf(acfPagePosts) > 0 && sizeOf(acfPagePosts.posts) > 0) {
+        const { posts } = acfPagePosts
+        handleAcfPagePosts(acfPageTemplate, pageContent, posts, handleComponent)
       }
     } else {
       handleAcfComponents(acfPageTemplate, pageContent, handleComponent)
@@ -201,7 +231,10 @@ const Page: React.FC<TAllProps> = (props: TAllProps) => {
       parsedContent.push(element)
     }
 
-    acfPageTemplatesSorted.forEach((acfPageTemplate: IPageTemplate<any>) => parseACFTemplete(pageContent, acfPageTemplate, addElement))
+    for (let index = 0; index < acfPageTemplatesSorted.length; index++) {
+      const acfPageTemplate = acfPageTemplatesSorted[index] as IPageTemplate<any>
+      parseACFTemplete(pageContent, acfPageTemplate, index, addElement)
+    }
 
     return parsedContent
   }

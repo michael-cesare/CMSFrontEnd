@@ -10,14 +10,14 @@ import { pageDataSel } from '@redux/page/selectors';
 import Page from '@components/Page/Page';
 
 import { IPage } from '@client/types';
-import { IPageTemplate, IWPPosts } from '@srcTypes/models';
+import { IPageTemplate, IWPPagePosts } from '@srcTypes/models';
 
 import '@styles/page.scss';
 
 interface IOwnReduxStateProps {
   page: IPage;
   advanceFields: Array<IPageTemplate<any>>;
-  pagePosts: Array<IWPPosts>
+  pagePosts: Array<IWPPagePosts>
 }
 
 type TAllProps = IOwnReduxStateProps;

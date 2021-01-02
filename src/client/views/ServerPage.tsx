@@ -11,7 +11,7 @@ import Posts from '@components/Posts/Posts'
 import Post from '@components/Post/Post'
 
 import { IPage } from '@client/types'
-import { IPageTemplate, IWPPosts, IWPPost } from '@srcTypes/models'
+import { IPageTemplate, IWPPosts, IWPPost, IWPPagePosts } from '@srcTypes/models'
 
 import '@styles/page.scss'
 
@@ -20,7 +20,7 @@ interface IOwnReduxStateProps {
   posts: IWPPosts
   post: IWPPost
   advanceFields: Array<IPageTemplate<any>>
-  pagePosts: Array<IWPPosts>
+  pagePosts: Array<IWPPagePosts>
 }
 
 type TAllProps = IOwnReduxStateProps
