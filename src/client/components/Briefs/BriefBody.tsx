@@ -3,21 +3,19 @@ import styled from 'styled-components'
 
 import { IStyle } from '@srcTypes/models';
 
-import Anchor from '@components/Anchor/Anchor';
-
 interface IOwnProps {
-  to: string;
   contentClass?: string;
   children: any;
-  id: number;
+  id: string;
   inlineStyle?: IStyle;
 }
 
-const Item = styled.li`
+const BriefBodyDiv = styled.div`
   background-color: ${(props: any) => props.theme.backgroundColor};
   padding: ${(props: any) => props.theme.padding};
   color: ${(props: any) => props.theme.color};
   font-size: ${(props: any) => props.theme.fontSize};
+  text-align: ${(props: any) => props.theme.textAlign};
 `;
 
 const defaultTheme: IStyle = {
@@ -29,27 +27,20 @@ const defaultTheme: IStyle = {
 
 type TAllProps = IOwnProps;
 
-const NavItem: FC<TAllProps> = (props: TAllProps) => {
-  const {
-    to, contentClass = '', children, id, inlineStyle = {},
-  } = props;
+const BriefBody: FC<TAllProps> = (props: TAllProps) => {
+  const { contentClass = '', children, id, inlineStyle = {} } = props;
 
   const theme = Object.assign(defaultTheme, inlineStyle);
 
   return (
-    <Item
-      key={id}
+    <BriefBodyDiv
+      key={`brief-body-div-${id}`}
+      className={contentClass}
       theme={theme}
     >
-      <Anchor
-        id={id}
-        to={to}
-        contentClass={contentClass}
-      >
-        {children}
-      </Anchor>
-    </Item>
+      {children}
+    </BriefBodyDiv>
   );
 }
 
-export default NavItem;
+export default BriefBody;

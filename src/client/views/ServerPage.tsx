@@ -1,39 +1,39 @@
-import React from "react";
-import { connect } from 'react-redux';
+import React from "react"
+import { connect } from 'react-redux'
 
-import { IAppState } from '@redux/models';
+import { IAppState } from '@redux/models'
 
-import { VMPageTemplatesSel, VMPagePostsSel, VMPostsDataSel, VMPostDataSel } from '@client/redux/nodeState/selectors';
-import { pageDataSel } from '@redux/page/selectors';
+import { VMPageTemplatesSel, VMPagePostsSel, VMPostsDataSel, VMPostDataSel } from '@client/redux/nodeState/selectors'
+import { pageDataSel } from '@redux/page/selectors'
 
-import Page from '@client/components/Page/Page';
-import Posts from '@client/components/Posts/Posts';
-import Post from '@client/components/Post/Post';
+import Page from '@components/Page/Page'
+import Posts from '@components/Posts/Posts'
+import Post from '@components/Post/Post'
 
-import { IPage } from '@client/types';
-import { IPageTemplate, IWPPosts, IWPPost } from '@srcTypes/models';
+import { IPage } from '@client/types'
+import { IPageTemplate, IWPPosts, IWPPost, IWPPagePosts } from '@srcTypes/models'
 
-import '@styles/page.scss';
+import '@styles/page.scss'
 
 interface IOwnReduxStateProps {
-  page: IPage;
-  posts: IWPPosts;
-  post: IWPPost;
-  advanceFields: Array<IPageTemplate<any>>;
-  pagePosts: Array<IWPPosts>
+  page: IPage
+  posts: IWPPosts
+  post: IWPPost
+  advanceFields: Array<IPageTemplate<any>>
+  pagePosts: Array<IWPPagePosts>
 }
 
-type TAllProps = IOwnReduxStateProps;
+type TAllProps = IOwnReduxStateProps
 
 const ServerPage: React.FC<TAllProps> = (props: TAllProps) => {
-  const { page, advanceFields, pagePosts, posts, post } = props;
+  const { page, advanceFields, pagePosts, posts, post } = props
 
   const PostNode = () => {
     return post ? (
       <Post
         data={post}
       />
-    ) : null;
+    ) : null
   }
 
   const PageNode = () => {
@@ -43,7 +43,7 @@ const ServerPage: React.FC<TAllProps> = (props: TAllProps) => {
         advanceFields={advanceFields}
         pagePosts={pagePosts}
       />
-    ) : null;
+    ) : null
   }
 
   const PostsNodes = () => {
@@ -51,7 +51,7 @@ const ServerPage: React.FC<TAllProps> = (props: TAllProps) => {
       <Posts
         data={posts}
       />
-    ) : null;
+    ) : null
   }
 
   return (
@@ -60,7 +60,7 @@ const ServerPage: React.FC<TAllProps> = (props: TAllProps) => {
       <PostNode />
       <PostsNodes />
     </div>
-  );
+  )
 }
 
 
@@ -72,4 +72,4 @@ const mapStateToProps = (state: IAppState): IOwnReduxStateProps => ({
   pagePosts: VMPagePostsSel(state),
 })
 
-export default connect(mapStateToProps)(ServerPage);
+export default connect(mapStateToProps)(ServerPage)
