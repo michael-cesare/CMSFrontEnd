@@ -3,7 +3,9 @@
 }
 
 .page-body {
-  height: 90vh;
+  z-index: 1;
+  position: fixed;
+  height: 86vh;
   width: 100%;
   margin: 0 auto;
   display: flex;
@@ -11,4 +13,16 @@
   align-items: stretch;
   overflow-y: auto;
   overflow-x: hidden;
+}
+
+.footer {
+  z-index: 1;
+  position: fixed;
+  height: 4vh;
+  width: 100%;
+  bottom: 0;
+  margin: 0 auto;
+  display: flex;
+  justify-content: center;
+  align-items: stretch;
 }
