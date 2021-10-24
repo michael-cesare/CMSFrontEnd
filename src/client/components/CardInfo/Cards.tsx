@@ -1,9 +1,9 @@
 import * as React from 'react'
 
-import Content from '@client/components/Content/Content'
-import Anchor from '@client/components/Anchor/Anchor'
+import Content from '@components/Content/Content'
+import Anchor from '@components/Anchor/Anchor'
 
-import { ICardInfo } from '@srcTypes/models'
+import { ICardInfo, IStyle } from '@srcTypes/models'
 
 interface IOwnProps {
   cardInfoList: Array<ICardInfo>,
@@ -12,10 +12,30 @@ interface IOwnProps {
 
 type TAllProps = IOwnProps
 
+/**
+ * Cards are ideal for short information about a subject.
+ * @param props 
+ */
 const Cards: React.FC<TAllProps> = (props: TAllProps) => {
   const { cardInfoList, index } = props
 
-  const renderCard = ({ title, image, text, buttonLink }: ICardInfo, key: number): JSX.Element => {
+  const titleStyle: IStyle = {
+    backgroundColor: 'rgba(255,255,255,1)',
+    padding: '1rem',
+    color: 'rgba(0,0,0,1)',
+    fontSize: '1.2rem',
+  }
+
+  const textStyle: IStyle = {
+    backgroundColor: 'rgba(255,255,255,1)',
+    padding: '1rem',
+    color: 'rgba(0,0,0,1)',
+    fontSize: '1.2rem',
+  }
+
+  const renderCard = ( cardInfo: ICardInfo, key: number): JSX.Element => {
+    const { title, image, text, buttonLink } = cardInfo
+
     return (
       <div key={`card-${key}`} className="card">
         <div key={`card-info-${key}`} className="card-info">
@@ -30,14 +50,16 @@ const Cards: React.FC<TAllProps> = (props: TAllProps) => {
             className="card-info_body"
           >
             <Content
-              key={`card-info-${key}_body-title`}
+              uid={`card-info-${key}_body-title`}
               contentClass="card-info_body-title"
+              inlineStyle={titleStyle}
             >
               {title}
             </Content>
             <Content
-              key={`card-info-${key}_body-text`}
+              uid={`card-info-${key}_body-text`}
               contentClass="card-info_body-text"
+              inlineStyle={textStyle}
             >
               {text}
             </Content>

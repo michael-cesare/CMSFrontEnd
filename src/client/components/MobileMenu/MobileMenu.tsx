@@ -4,7 +4,7 @@ import classNames from 'classnames';
 import { IBooleanAction } from '@redux/models';
 import { IWPMenu, IMenuItem } from '@srcTypes/models';
 
-import NavItem from '@client/components/NavItem/NavItem';
+import NavItem from '@components/NavItem/NavItem';
 
 import { sizeOf } from '@common/utils/core.util';
 import { isActiveRoute } from '@utils/url.util';

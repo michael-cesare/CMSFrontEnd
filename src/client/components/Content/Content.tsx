@@ -5,50 +5,56 @@ import { IStyle } from '@srcTypes/models'
 
 interface IOwnProps {
   contentClass: string
-  children: any
-  key: any
+  children?: any
+  uid: any
   inlineStyle?: IStyle
 }
 
-const defaultTheme: IStyle = {
+const defaultTheme: IStyle | any = {
   backgroundColor: 'unset',
   padding: 'unset',
-  color: 'rgba(0,0,0,1)',
+  color: 'unset',
   fontSize: '1rem',
+  textAlign: 'left',
 }
 
-const ContentDiv = ({ key, contentClass, html }: any) => {
+const ContentDiv = ({ uid, contentClass, html }: any) => {
   return (
     <div
-      key={key}
+      key={uid}
       className={contentClass}
       dangerouslySetInnerHTML={{ __html: html }}
     />
   )
 }
 
-const StyledDiv = styled(ContentDiv)`
-  background-color: ${(props: any) => props.theme.backgroundColor}
-  padding: ${(props: any) => props.theme.padding}
-  color: ${(props: any) => props.theme.color}
-  font-size: ${(props: any) => props.theme.fontSize}
-`
+const Wrapper = styled.div`
+  background-color: ${(props: any) => props.theme.backgroundColor};
+  padding: ${(props: any) => props.theme.padding};
+  color: ${(props: any) => props.theme.color};
+  font-size: ${(props: any) => props.theme.fontSize};
+  text-align: ${(props: any) => props.theme.textAlign};
+`;
 
 const Content: FC<IOwnProps> = (props: IOwnProps) => {
   const {
-    contentClass, children, key, inlineStyle = {},
+    contentClass, children, uid, inlineStyle = {},
   } = props
 
   const theme = Object.assign(defaultTheme, inlineStyle)
-  const filteredChildren = children ? children.replace(/\n/g, "<br />") : ''
+  const filteredChildren = children && children.replace ? children.replace(/\n/g, "<br />") : ''
 
   return (
-    <StyledDiv
-      key={key}
-      contentClass={contentClass}
+    <Wrapper
+      key={uid}
       theme={theme}
-      html={filteredChildren}
-    />
+    >
+      <ContentDiv
+        uid={uid}
+        contentClass={contentClass}
+        html={filteredChildren}
+      />
+    </Wrapper>
   )
 }
 

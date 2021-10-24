@@ -1,5 +1,7 @@
 import { WORDPRESS_HOST } from "@common/config/envConfig";
 
+import { isNodejs } from '@common/utils/core.util';
+
 export const isLocalhost = (): Boolean => {
   let nodeSSRState = false;
   if (typeof window !== 'undefined' && window) {
@@ -25,10 +27,12 @@ export const getContentUploadsUrl = (): string => {
 }
 
 export const isActiveRoute = (route: string) => {
-  let returnResult = false;
-  if (typeof window !== 'undefined' && window) {
-    returnResult = window.location.pathname.indexOf(route) > -1
+  let pathname = ''
+  if (isNodejs()) {
+    pathname = global.context.pathname
+  } else{
+    pathname = window.location.pathname
   }
 
-  return returnResult;
+  return pathname.indexOf(route) > -1
 }

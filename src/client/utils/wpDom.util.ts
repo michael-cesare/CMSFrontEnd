@@ -67,7 +67,7 @@ export const parsePostLink = (wordpressLink: string): string => {
   const contentUrl = getContentUrl()
   const frontendUrl = `//${SITE_URL()}`
   const regex = new RegExp(contentUrl, 'g')
-  const frontEndLink = wordpressLink.replace(regex, frontendUrl)
+  const frontEndLink = wordpressLink?.replace(regex, frontendUrl)
 
   return frontEndLink
 }
@@ -79,5 +79,5 @@ export const parsePostLink = (wordpressLink: string): string => {
  * @param htmlString {string} - wordpress post content
  */
 export const parseWPImageLink = (wordpressLink: string): string => {
-  return wordpressLink.replace(/(["'= ])(\/wp-content\/uploads)/g, getContentUploadsUrl())
+  return wordpressLink?.replace(/(["'= ])(\/wp-content\/uploads)/g, getContentUploadsUrl())
 }

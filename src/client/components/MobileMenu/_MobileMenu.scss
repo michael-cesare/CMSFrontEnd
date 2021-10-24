@@ -3,7 +3,7 @@
   flex-flow: row;
   justify-content: center;
   align-items: center;
-  width: 100%;
+  width: 100vw;
   height: 100%;
   text-align: center;
   font-weight: bold;
@@ -17,7 +17,7 @@
   &-open {
     position: fixed;
     flex-direction: column;
-    z-index: 1;
+    z-index: 2;
     height: 100vh;
   }
 

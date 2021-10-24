@@ -1,6 +1,6 @@
 import { IAppState } from '@redux/models';
 
-import { IWPPage, IWPMenu, IPageTemplate, IWPPosts, IWPPost } from '@srcTypes/models';
+import { IWPPage, IWPMenu, IPageTemplate, IWPPosts, IWPPost, IWPPagePosts } from '@srcTypes/models';
 import { IPageVM, IPostVM } from '@srcTypes/viewModels';
 
 
@@ -41,9 +41,9 @@ export const VMPostDataSel = ( state: IAppState ): IWPPost => {
  * page posts are a list of postTypes queries and their post result.
  * A Page can have none or many postType posts.
  */
-export const VMPagePostsSel = ( state: IAppState ): Array<IWPPosts> => {
+export const VMPagePostsSel = ( state: IAppState ): Array<IWPPagePosts> => {
   const pageData = VMPageDataSel(state) as IWPPage;
-  const pagePosts = pageData?.pagePosts ? pageData.pagePosts : undefined as Array<IWPPosts> | undefined;
+  const pagePosts = pageData?.pagePosts ? pageData.pagePosts : undefined as Array<IWPPagePosts> | undefined;
 
   return pagePosts || [];
 }

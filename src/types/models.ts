@@ -35,9 +35,16 @@ export interface IWPPosts extends IObject {
   posts: Array<IWPPost>,
 }
 
+// MappedIndex Is used to know which acf pageTemplate index is mapped to pagePosts[index]
+// Note: order attribtue is important and tied with this
+export interface IWPPagePosts extends IWPPosts {
+  mappedIndex?: number,
+}
+
+// 1 page can have multiple posts lists, this is based on ACF page templates.
 export interface IWPPage extends IWPObject {
   advanceFields?: IAdvanceField,
-  pagePosts?: Array<IWPPosts>,
+  pagePosts?: Array<IWPPagePosts>,
 }
 
 export interface IAdvanceField {
@@ -55,14 +62,19 @@ export interface IFetchResponse {
 }
 
 export interface IError {
-  code: any
-  info: string
+  code: any,
+  info: string,
 }
 
+export interface IFetchPostsListRequest extends IFetchRequest {
+  searchPostIds: Array<number>,
+}
+
+
 export interface IFetchPostsRequest extends IFetchRequest {
-  searchCount: number
-  postType: string
-  postSlug: string
+  searchCount: number,
+  postType: string,
+  postSlug: string,
   sortOrder: string,
   pageSize: number,
   pageIndex: number,
@@ -77,6 +89,17 @@ export interface IFetchPostsResponse extends IFetchResponse {
 
 
 //  -------------    ACF PageTemplates Objects   -------------------
+
+export interface IBgImageHeader {
+  text: string,
+  style: IStyle,
+}
+
+export interface IBgImage {
+  url: string,
+  header: IBgImageHeader,
+  paragraphs: Array<IParagraph>,
+}
 
 export interface ICardInfo {
   title: string,
@@ -95,10 +118,24 @@ export interface IParagraphsTitle {
   style?: IStyle,
 }
 
+export interface IBrief {
+  title: string,
+  image: string,
+  text: string,
+  link: string,
+}
+export interface IBriefs {
+  briefs: Array<IBrief>,
+  titleStyle?: IStyle,
+  textStyle?: IStyle,
+  style?: IStyle,
+}
+
 //  -------------    ACF PageTemplates    -------------------
 
 /**
  * Every ACF in page_template, must have the listed attibutes as a base object
+ * in the request you may only have 1 of contentPostTypeQuery or contentPostIdsQuery
  * 
  * order                order to sort the component for viewing
  * placeHolder          text in wordpress page content to be replaced by this page template content
@@ -107,6 +144,8 @@ export interface IParagraphsTitle {
  * content              The base content to be extended by children. fill html in page using its json data.
  * contentPostTypeQuery Custom Post Types query. When provided,
  *                      content attribute is ignored and it will try to fetch posts by its post type and query.
+ * contentPostIdsQuery  Custom Post search query. When provided,
+ *                      it will try to fetch posts by ids.
  * style                General Syling for the component, this is optional.
  */
 export interface IPageTemplate<T> {
@@ -115,6 +154,7 @@ export interface IPageTemplate<T> {
   type: string,
   content: T,
   contentPostTypeQuery?: IFetchPostsRequest,
+  contentPostIdsQuery?: IFetchPostsListRequest,
   style?: IStyle,
 }
 
@@ -125,7 +165,10 @@ export interface IPageTemplateParagraphs extends IPageTemplate<Array<IParagraph>
   title: IParagraphsTitle,
 }
 
-export interface IPageTemplateBgImage extends IPageTemplate<string> {
+export interface IPageTemplateBgImage extends IPageTemplate<IBgImage> {
+}
+
+export interface IPageTemplateIBriefs extends IPageTemplate<IBriefs> {
 }
 
 //  -------------    OTHER  Objects   -------------------
@@ -135,6 +178,7 @@ export interface IStyle {
   padding: string,
   color: string,
   fontSize: string,
+  textAlign?: string | undefined,
 }
 
 export interface IMenuItem {
